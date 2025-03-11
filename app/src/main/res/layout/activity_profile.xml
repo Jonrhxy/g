@@ -247,9 +247,9 @@
                 android:id="@+id/roundedTopContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/bgblue"
                 android:clipToOutline="true"
+                android:orientation="vertical"
                 android:padding="10dp">
 
                 <!-- "My Badge" row -->
@@ -259,31 +259,34 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:id="@+id/textMyBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/badges"
                         android:layout_marginStart="15sp"
+                        android:text="@string/badges"
+                        android:textColor="@android:color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
+                        android:textStyle="bold" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_weight="1" />
+
                     <TextView
                         android:id="@+id/textSeeAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold_italic"
-                        android:text="@string/seeAll"
-                        android:layout_marginEnd="25sp"
                         android:layout_marginTop="-5sp"
-                        android:textSize="18sp"
+                        android:layout_marginEnd="25sp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:textColor="@android:color/white"/>
+                        android:fontFamily="@font/poppins_semibold_italic"
+                        android:text="@string/seeAll"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <!-- Horizontal ScrollView for Badges -->
@@ -291,17 +294,18 @@
                     android:id="@+id/badgeScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bgbrown"
-                    android:clipToPadding="false">
+                    android:clipToPadding="false"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
                     <LinearLayout
                         android:id="@+id/linearBadgeContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp">
                         <!-- Example Badges -->
@@ -310,16 +314,19 @@
                             android:layout_height="75dp"
                             android:layout_marginEnd="16dp"
                             android:src="@drawable/ecogreen" />
+
                         <ImageView
                             android:layout_width="70dp"
                             android:layout_height="70dp"
                             android:layout_marginEnd="16dp"
                             android:src="@drawable/ecoblue" />
+
                         <ImageView
                             android:layout_width="70dp"
                             android:layout_height="70dp"
                             android:layout_marginEnd="16dp"
                             android:src="@drawable/ecobrown" />
+
                         <ImageView
                             android:layout_width="70dp"
                             android:layout_height="70dp"
@@ -335,9 +342,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/stats"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
                     tools:ignore="HardcodedText" />
 
                 <!-- Container for Month/Year arrows + day bubbles -->
@@ -345,10 +352,10 @@
                     android:id="@+id/parentLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_marginTop="2dp"
                     android:background="@drawable/bgbrown"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="5dp">
 
                     <!-- Top Row: Left Arrow, Month/Year, Right Arrow -->
@@ -363,24 +370,24 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
                             android:fontFamily="@font/poppinsmedium"
+                            android:gravity="center"
                             android:text="@string/challenge"
-                            android:textSize="18sp"
                             android:textColor="@android:color/white"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvEarned"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginStart="80sp"
-                            android:gravity="center"
+                            android:layout_weight="1"
                             android:fontFamily="@font/poppinsmedium"
+                            android:gravity="center"
                             android:text="@string/earned"
-                            android:textSize="18sp"
                             android:textColor="@android:color/white"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -389,18 +396,18 @@
                         android:id="@+id/activityLogLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_gravity="left"
                         android:layout_marginStart="5sp"
                         android:layout_marginTop="-28dp"
+                        android:orientation="vertical"
                         android:weightSum="4">
 
                         <LinearLayout
                             android:id="@+id/activityLogLayout1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginTop="8dp"
+                            android:orientation="vertical"
                             android:weightSum="4">
 
                             <TextView
@@ -408,53 +415,53 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/assess"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/batteco"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
-                            android:textSize="15sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/batteco"
+                                android:textColor="@android:color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/chall1"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
-                            android:textSize="15sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/chall1"
+                                android:textColor="@android:color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/chall2"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
-                            android:textSize="15sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/chall2"
+                                android:textColor="@android:color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
 
-                        <!-- SCORES -->
+                    <!-- SCORES -->
                     <LinearLayout
-                    android:id="@+id/ScoreLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="35sp"
-                    android:layout_marginTop="-98dp"
-                    android:weightSum="4">
-
-                    <LinearLayout
-                        android:id="@+id/idScoreLayout1"
+                        android:id="@+id/ScoreLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="-98dp"
+                        android:layout_marginEnd="35sp"
                         android:orientation="vertical"
-                        android:layout_marginTop="8dp"
                         android:weightSum="4">
+
+                        <LinearLayout
+                            android:id="@+id/idScoreLayout1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:weightSum="4">
 
                             <TextView
                                 android:id="@+id/AssessScore"
@@ -463,8 +470,8 @@
                                 android:layout_marginStart="10sp"
                                 android:text="@string/zero"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/BattleEcoScore"
@@ -473,8 +480,8 @@
                                 android:layout_marginStart="10sp"
                                 android:text="@string/zero"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/GoGreenScore"
@@ -483,8 +490,8 @@
                                 android:layout_marginStart="10sp"
                                 android:text="@string/zero"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/CaptureScore"
@@ -493,8 +500,8 @@
                                 android:layout_marginStart="10sp"
                                 android:text="@string/zero"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -502,6 +509,240 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"> <!-- A dark background, as in your screenshot -->
+
+                    <!-- TOP BAR: "Total Points" and "Total Coins" -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <!-- "Total Points" block -->
+                        <LinearLayout
+                            android:layout_width="60sp"
+                            android:layout_height="48sp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/bgbrown">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Points"
+                                android:drawableLeft="@drawable/thropy"
+                                android:drawablePadding="4dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+
+                        <!-- "Total Coins" block -->
+                        <LinearLayout
+                            android:layout_width="60sp"
+                            android:layout_height="48sp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/bgbrown">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Coins"
+                                android:drawableLeft="@drawable/coin"
+                                android:drawablePadding="4dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:gravity="center"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- ACTIVITY LOG CONTAINER (brown background + bubble) -->
+                    <LinearLayout
+                        android:id="@+id/activityLogHistoryContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@drawable/bgbrown">
+
+                        <!-- "activity log" bubble at the top-right -->
+                        <TextView
+                            android:id="@+id/textActivityLogHistoryTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="center"
+                            android:background="@drawable/bubble"
+                            android:text="activity log"
+                            android:textColor="@android:color/white"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="12dp"/>
+
+                        <!-- First date + logs -->
+                        <TextView
+                            android:id="@+id/textDateMarch10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="March 10, 2024"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textLog1_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="4dp"
+                            android:text="• You earned Eco Rookie badge"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textLog1_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="• You earned Eco Leader badge for tracking your travel"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                        <!-- Second date + logs -->
+                        <TextView
+                            android:id="@+id/textDateMarch9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="March 9, 2024"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textLog2_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="• Equipped Wind Mage"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                        <!-- Third date + logs -->
+                        <TextView
+                            android:id="@+id/textDateMarch8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="March 8, 2024"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textLog3_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="4dp"
+                            android:text="• You earned Eco Rookie badge"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textLog3_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="• You earned Eco Leader badge for tracking your travel"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Selected Character Section (NO Shop button) -->
+                <LinearLayout
+                    android:id="@+id/selectedCharacterContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:padding="8dp">
+
+                    <!-- Display the currently selected character -->
+                    <ImageView
+                        android:id="@+id/imageSelectedCharacter"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitCenter"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/character" />
+
+                    <!-- Display the selected character's name -->
+                    <TextView
+                        android:id="@+id/textSelectedCharacterName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Green Warrior"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@android:color/white"/>
+
+                    <!-- Label for unlocked characters -->
+                    <TextView
+                        android:id="@+id/textUnlockedCharactersLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Swipe to select from unlocked characters:"
+                        android:textSize="16sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@android:color/white"/>
+
+                    <!-- Horizontal RecyclerView for unlocked characters -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerUnlockedChars"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:clipToPadding="false"
+                        android:paddingBottom="8dp"/>
+                </LinearLayout>
 
 
             </LinearLayout>

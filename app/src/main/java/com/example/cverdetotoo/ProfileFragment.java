@@ -38,9 +38,9 @@ import java.util.Locale;
 
 public class ProfileFragment extends Fragment {
 
-    private ImageButton ivLeftArrow, ivRightArrow;
-    private TextView tvMonthYear, textCoinValue; // textCoinValue to show coins
-    private Calendar calendar;
+
+    private TextView  textCoinValue; // textCoinValue to show coins
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -122,17 +122,6 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        calendar = Calendar.getInstance();
-        updateMonthYearDisplay();
-
-        ivLeftArrow.setOnClickListener(v2 -> {
-            calendar.add(Calendar.MONTH, -1);
-            updateMonthYearDisplay();
-        });
-        ivRightArrow.setOnClickListener(v2 -> {
-            calendar.add(Calendar.MONTH, 1);
-            updateMonthYearDisplay();
-        });
 
         // Day bubble selection
         LinearLayout activityLogLayout = view.findViewById(R.id.activityLogLayout);
@@ -207,10 +196,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void updateMonthYearDisplay() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        tvMonthYear.setText(sdf.format(calendar.getTime()));
-    }
+
 
     // Example method to fetch coin points from Firestore and display in textCoinValue
     private void fetchCoinPoints() {
