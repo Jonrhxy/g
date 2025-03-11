@@ -121,10 +121,6 @@ public class ProfileFragment extends Fragment {
             textGreeting.setText("Hi, Guest!");
         }
 
-        // Month/year controls
-        ivLeftArrow = view.findViewById(R.id.ivLeftArrow);
-        ivRightArrow = view.findViewById(R.id.ivRightArrow);
-        tvMonthYear = view.findViewById(R.id.tvMonthYear);
 
         calendar = Calendar.getInstance();
         updateMonthYearDisplay();
@@ -164,7 +160,7 @@ public class ProfileFragment extends Fragment {
 
         // Set up the new shop icon to open MiniShopActivity.
         // Make sure your layout includes an ImageView with id "imageShopIcon"
-        shopIcon = view.findViewById(R.id.imageNewIcon);
+        shopIcon = view.findViewById(R.id.imageShop);
         shopIcon.setOnClickListener(v2 -> {
             Intent intent = new Intent(getActivity(), MiniShopActivity.class);
             startActivity(intent);
