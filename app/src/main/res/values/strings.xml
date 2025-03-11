@@ -5,7 +5,7 @@
     <string name="Email_Uname">Email/Username</string>
     <string name="getstart">Click anywhere to start!</string>
     <string name="Password">Password</string>
-    <string name="forgotpassword">Forgot Password</string>
+    <string name="forgotpassword"><u>Forgot Password</u></string>
     <string name="login">Login</string>
     <string name="reg">New to C-Verde? SignUp</string>
     <string name="logo">\n</string>
@@ -29,7 +29,7 @@
     <string name="timee">\n</string>
     <string name="guideRB">Choose 1 to continue.</string>
     <string name="submit">Submit</string>
-    <string name="next">NEXT</string>
+    <string name="next">Next</string>
     <string name="WD">Well Done!</string>
     <string name="pre1scoress">Your score is:</string>
     <string name="pre1score">5/5 points</string>
@@ -99,6 +99,12 @@
     <string name="postQ14b">Global warming</string>
     <string name="postQ14c">Reduced ocean levels</string>
     <string name="postQ14d">Increased wildlife populations</string>
+    <string name="preQ21a">Planting more trees</string>
+    <string name="preQ21b">Burning fossil fuels</string>
+    <string name="preQ21c">Using renewable energy</string>
+    <string name="preQ21d">Recycling waste</string>
+    <string name="preqeus21">" What is the primary cause of an increased carbon footprint?"</string>
+
 
     <!-- ERICK -->
 
@@ -159,6 +165,39 @@
     <string name="aboutus">About Us</string>
     <string name="editprof">Edit Profile</string>
     <string name="delpic">\n</string>
+    <string name="preqeus22">How does a high carbon footprint contribute to climate change?</string>
+    <string name="preQ22a">It reduces air pollution</string>
+    <string name="preQ22b">It increases greenhouse gases in the atmosphere</string>
+    <string name="preQ22c">It cools down the Earth\'s temperature</string>
+    <string name="preQ22d">It helps plants grow faster</string>
+    <string name="preqeus23">Which of the following health issues is linked to high carbon emissions?</string>
+    <string name="preQ23a">Asthma and lung diseases</string>
+    <string name="preQ23b">Common cold</string>
+    <string name="preQ23c">Broken bones</string>
+    <string name="preQ23d">Increased eyesight problems</string>
+    <string name="preqeus24">What happens to sea levels when carbon footprints increase?</string>
+    <string name="preQ24a">They stay the same</string>
+    <string name="preQ24b">They decrease</string>
+    <string name="preQ24c">They rise due to melting ice caps</string>
+    <string name="preQ24d">They freeze over</string>
+    <string name="preqeus25">Which sector is a major contributor to carbon footprints?</string>
+    <string name="preQ25d">All of the above</string>
+    <string name="preQ25c">Industry</string>
+    <string name="preQ25b">Transportation</string>
+    <string name="preQ25a">Agriculture</string>
+    <string name="default_web_client_id" />
+    <string name="ActLog">Activity Log</string>
+    <string name="ResetPass">Reset Password</string>
+    <string name="seeAll">See All</string>
+    <string name="badges">My Badges</string>
+    <string name="stats">Statistics</string>
+    <string name="challenge">Challenges</string>
+    <string name="earned">Earned</string>
+    <string name="assess">Assessments</string>
+    <string name="zero">0</string>
+    <string name="batteco">Battle Eco</string>
+    <string name="chall1">Go Green With Every Steps</string>
+    <string name="chall2">Capture your Carbon FootPrint</string>
 
 
 </resources>

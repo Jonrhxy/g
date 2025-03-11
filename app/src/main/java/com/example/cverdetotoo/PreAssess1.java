@@ -57,7 +57,7 @@ public class PreAssess1 extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
                     // Data exists, redirect to Homepage
-                    Intent intent = new Intent(PreAssess1.this, PreAsses11.class);
+                    Intent intent = new Intent(PreAssess1.this, video1.class);
                     startActivity(intent);
                 } else {
                     // No data exists, redirect to PreAsses11 to collect data

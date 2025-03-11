@@ -56,10 +56,10 @@
             android:layout_width="212dp"
             android:layout_height="63dp"
             android:layout_below="@id/motivationalText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50sp"
-        android:background="@drawable/preassesbtn"
-        android:text="@string/start" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50sp"
+            android:background="@drawable/preassesbtn"
+            android:text="@string/start" />
     </RelativeLayout>
 
 </ScrollView>

@@ -6,15 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/loadingbg"
     tools:context=".Loadingpage">
 
-    <!-- Background VideoView -->
-    <VideoView
-        android:id="@+id/videoViewBackground"
-        android:layout_width="wrap_content"
-        android:layout_height="746dp"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent" />
 
     <!-- Overlay content -->
     <LinearLayout
@@ -24,22 +18,13 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Logo ImageView -->
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="212dp"
-            android:layout_height="298dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/logo"
-            app:srcCompat="@drawable/final_logo" />
-
         <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="148dp"
             android:layout_height="148dp"
             android:layout_gravity="center"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="-114dp"
             android:visibility="visible" />
 
 

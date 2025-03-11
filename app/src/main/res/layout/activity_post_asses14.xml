@@ -164,7 +164,9 @@
                 android:layout_width="137dp"
                 android:layout_height="65dp"
                 android:text="@string/submit"
-                android:background="@drawable/preassesbtn"
+                android:background="@drawable/btnblue"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
                 android:textSize="20sp"
                 android:backgroundTint="@null"/>
 
@@ -173,7 +175,9 @@
                 android:layout_width="137dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="30sp"
-                android:background="@drawable/preassesbtn2"
+                android:background="@drawable/btnblue1"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
                 android:text="@string/next"
                 android:textSize="20sp"
                 android:backgroundTint="@null" />

@@ -2,18 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Video Background -->
-    <VideoView
-        android:id="@+id/videoViewBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
+    android:layout_height="match_parent"
+    android:background="@drawable/regbg">
 
     <!-- Form Layout (Inside LinearLayout) -->
     <LinearLayout
@@ -27,7 +17,7 @@
             android:id="@+id/reg"
             android:layout_width="340dp"
             android:layout_height="580dp"
-            android:background="@drawable/regbg"
+            android:background="@drawable/regbg1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -36,8 +26,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green"
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue"
                 app:counterMaxLength="20">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -51,7 +41,7 @@
                     android:inputType="text"
                     android:textSize="20sp"
                     android:maxLength="20"
-                    android:textColor="@color/Green" />
+                    android:textColor="@color/WRed" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Last Name Field -->
@@ -59,9 +49,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green">
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtLname"
@@ -73,7 +62,7 @@
                     android:maxLength="20"
                     android:singleLine="true"
                     android:inputType="text"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Username Field -->
@@ -81,8 +70,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green">
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtUname"
@@ -94,7 +83,7 @@
                     android:maxLength="20"
                     android:singleLine="true"
                     android:inputType="text"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Email Field -->
@@ -102,8 +91,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green"
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue"
                 app:counterMaxLength="30">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +105,7 @@
                     android:maxLength="99"
                     android:singleLine="true"
                     android:inputType="text"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Student ID Field -->
@@ -124,8 +113,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green"
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue"
                 app:counterMaxLength="30">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -138,7 +127,7 @@
                     android:maxLength="20"
                     android:singleLine="true"
                     android:inputType="text"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Field -->
@@ -147,9 +136,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/Green"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green">
+                app:passwordToggleTint="@color/WBlue"
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtpass"
@@ -161,7 +150,7 @@
                     android:textSize="20sp"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Confirm Password Field -->
@@ -170,9 +159,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/Green"
-                android:textColorHint="@color/Green"
-                app:hintTextColor="@color/Green">
+                app:passwordToggleTint="@color/WBlue"
+                android:textColorHint="@color/WBlue"
+                app:hintTextColor="@color/WBlue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtconpass"
@@ -183,7 +172,7 @@
                     android:inputType="textPassword"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:textColor="@color/Green"/>
+                    android:textColor="@color/WBlue"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Terms & Conditions Checkbox -->
@@ -195,7 +184,7 @@
                 android:textSize="14sp"
                 android:text="@string/I_agree_to_the_Terms_and_Conditions"
                 android:fontFamily="@font/afacad"
-                android:textColor="@color/Green"
+                android:textColor="@color/WBlue"
                 android:theme="@style/TermsCond"
                 android:contentDescription="@string/terms_conditions_description" />
 
@@ -206,7 +195,7 @@
             android:id="@+id/SignUpbtn"
             android:layout_width="326dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/btnsignin"
+            android:background="@drawable/redbtn"
             android:layout_marginTop="15dp"
             android:padding="12dp"
             android:text="@string/SignUp"
@@ -221,7 +210,7 @@
             android:layout_marginTop="15dp"
             android:fontFamily="@font/afacad"
             android:text="@string/Do_have_an_account_Login"
-            android:textColor="@color/LGreen"
+            android:textColor="@color/WRed"
             android:textSize="18sp"
             android:textStyle="italic|normal" />
 

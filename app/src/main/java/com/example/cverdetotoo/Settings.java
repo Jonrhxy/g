@@ -33,7 +33,7 @@ public class Settings extends AppCompatActivity {
 
     // Declare views
     private ImageView ivBack;
-    private CardView cardEditProfile, cardTermsConditions, cardAboutUs, cardDeleteAccount;
+    private CardView cardEditProfile, cardTermsConditions, cardAboutUs, cardDeleteAccount,cardActivityLog;
     private ImageButton btnLogout;
 
     @Override
@@ -48,6 +48,7 @@ public class Settings extends AppCompatActivity {
         cardAboutUs = findViewById(R.id.cardAboutUs);
         cardDeleteAccount = findViewById(R.id.cardDeleteAccount);
         btnLogout = findViewById(R.id.btnLogout);
+        cardActivityLog = findViewById(R.id.cardActivityLog);
 
         // Back arrow: simply finish the activity
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +100,16 @@ public class Settings extends AppCompatActivity {
                 logoutUser();
             }
         });
+
+        cardActivityLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Settings.this, ActivityLog.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     /**
      * Displays a confirmation dialog to schedule account deletion.

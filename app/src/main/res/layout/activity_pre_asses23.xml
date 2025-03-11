@@ -54,21 +54,23 @@
 
       <ImageView
           android:id="@+id/TransPic"
-          android:layout_width="230dp"
+          android:layout_width="350dp"
           android:layout_height="230dp"
           app:srcCompat="@drawable/homebluecurve" />
 
       <TextView
           android:id="@+id/questionText2"
-          android:layout_width="wrap_content"
+          android:layout_width="300dp"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
+          android:textAlignment="center"
           android:fontFamily="@font/poppins_bold"
-          android:text="@string/preqeus1"
+          android:text="@string/preqeus23"
           android:textColor="@color/WBlue"
-          android:textSize="25sp"
+          android:textSize="24sp"
           android:textStyle="normal" />
     </FrameLayout>
+
 
     <TextView
         android:id="@+id/guide"
@@ -104,7 +106,7 @@
           android:minHeight="48dp"
           android:padding="12dp"
           android:paddingStart="10dp"
-          android:text="@string/preQ11a"
+          android:text="@string/preQ23a"
           android:textColor="#000000" />
 
       <RadioButton
@@ -117,7 +119,7 @@
           android:minHeight="48dp"
           android:padding="12dp"
           android:paddingStart="10dp"
-          android:text="@string/preQ11b"
+          android:text="@string/preQ23b"
           android:textColor="#000000" />
 
       <RadioButton
@@ -130,7 +132,7 @@
           android:minHeight="48dp"
           android:padding="12dp"
           android:paddingStart="10dp"
-          android:text="@string/preQ11c"
+          android:text="@string/preQ23c"
           android:textColor="#000000" />
 
       <RadioButton
@@ -143,8 +145,8 @@
           android:minHeight="48dp"
           android:padding="12dp"
           android:paddingStart="10dp"
-          android:text="@string/preQ11d"
-          android:textColor="#000000" />
+          android:text="@string/preQ23d"
+          android:textColor="@color/BlckBlue" />
     </RadioGroup>
 
     <LinearLayout
@@ -162,6 +164,8 @@
           android:id="@+id/preq23"
           android:layout_width="137dp"
           android:layout_height="65dp"
+          android:textAllCaps="false"
+          android:fontFamily="@font/poppinsregular"
           android:background="@drawable/preassesbtn"
           android:backgroundTint="@null"
           android:text="@string/submit"
@@ -172,6 +176,8 @@
           android:layout_width="137dp"
           android:layout_height="65dp"
           android:layout_marginStart="30sp"
+          android:textAllCaps="false"
+          android:fontFamily="@font/poppinsregular"
           android:background="@drawable/preassesbtn2"
           android:text="@string/next"
           android:textSize="20sp"

@@ -2,18 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/regbg">
 
-    <!-- Background Video View -->
-    <VideoView
-        android:id="@+id/videoViewBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +19,7 @@
             android:layout_width="335dp"
             android:layout_height="190dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/regbg"
+            android:background="@drawable/regbg1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -37,8 +28,8 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:hintTextColor="@color/Green"
-                android:textColorHint="@color/Green"
+                app:hintTextColor="@color/WRed"
+                android:textColorHint="@color/WRed"
                 app:counterMaxLength="30">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -50,7 +41,7 @@
                     android:textSize="20sp"
                     android:singleLine="true"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/Green" />
+                    android:textColor="@color/WRed" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Label and Input -->
@@ -58,9 +49,9 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/Green"
-                app:hintTextColor="@color/Green"
-                android:textColorHint="@color/Green">
+                app:passwordToggleTint="@color/WRed"
+                app:hintTextColor="@color/WRed"
+                android:textColorHint="@color/WRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/LastPass"
@@ -72,7 +63,7 @@
                     android:maxLength="20"
                     android:textSize="20sp"
                     android:singleLine="true"
-                    android:textColor="@color/Green" />
+                    android:textColor="@color/WRed" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Forgot Password -->
@@ -82,17 +73,18 @@
 
                 <Button
                     android:id="@+id/btn_forgot_password"
-                    android:layout_width="182dp"
+                    android:layout_width="1000sp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="204dp"
+                    android:layout_marginStart="170dp"
+                    android:textAllCaps="false"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/afacad"
                     android:padding="0dp"
                     android:text="@string/forgotpassword"
-                    android:textColor="@color/Green"
-                    android:textSize="16sp"
+                    android:textColor="@color/WRed"
+                    android:textSize="19sp"
                     android:textStyle="italic" />
 
             </RelativeLayout>
@@ -114,10 +106,10 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="35dp"
             android:fontFamily="@font/poppins_semibold"
-            android:background="@drawable/btn1"
+            android:background="@drawable/redbtn"
             android:padding="12dp"
             android:text="@string/login"
-            android:textColor="@color/Green" />
+            android:textColor="@color/WRed" />
 
         <!-- Register Text -->
         <TextView
@@ -127,7 +119,7 @@
             android:layout_marginTop="15dp"
             android:fontFamily="@font/poppins_italic"
             android:text="@string/reg"
-            android:textColor="@color/LBrown"
+            android:textColor="@color/WRed"
             android:textSize="15sp"
             android:clickable="true"
             android:focusable="true" />

@@ -50,8 +50,7 @@ public class PreAssess2after extends AppCompatActivity {
         // Save the score to Firestore
         saveScoreToFirestore(score);
 
-        // Fetch all correct answers from Firestore and append them to the TextView
-        fetchCorrectAnswers();
+
 
         // Set click listener for the button
         btnq1done.setOnClickListener(v -> {
@@ -87,26 +86,7 @@ public class PreAssess2after extends AppCompatActivity {
     }
 
     // Fetch all correct answers from Firestore (stored in the "quiz" collection)
-    private void fetchCorrectAnswers() {
-        db.collection("quiz")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    StringBuilder sb = new StringBuilder();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String correctAnswer = document.getString("correctAnswer");
-                        if (correctAnswer != null) {
-                            sb.append(correctAnswer).append("\n");
-                        }
-                    }
-                    // Append the correct answers to the TextView after the score
-                    String currentText = scoreTextView.getText().toString();
-                    scoreTextView.setText(currentText);
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(PreAssess2after.this, "Error fetching correct answers", Toast.LENGTH_SHORT).show());
-    }
-
-    // Validation logic before navigating
+      // Validation logic before navigating
     private boolean validateBeforeRedirect() {
         // Replace with your actual validation logic if needed
         return true;

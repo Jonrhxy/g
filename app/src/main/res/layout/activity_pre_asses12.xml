@@ -164,9 +164,11 @@
                 android:id="@+id/preq12"
                 android:layout_width="137dp"
                 android:layout_height="65dp"
+                android:textAllCaps="false"
                 android:text="@string/submit"
                 android:background="@drawable/preassesbtn"
                 android:textSize="20sp"
+                android:fontFamily="@font/poppinsregular"
                 android:backgroundTint="@null"/>
 
             <Button
@@ -174,7 +176,9 @@
                 android:layout_width="137dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="30sp"
+                android:textAllCaps="false"
                 android:background="@drawable/preassesbtn2"
+                android:fontFamily="@font/poppinsregular"
                 android:text="@string/next"
                 android:textSize="20sp"
                 android:backgroundTint="@null" />

@@ -2,7 +2,6 @@ package com.example.cverdetotoo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -74,15 +73,8 @@ public class Signin extends AppCompatActivity {
         LastPass = findViewById(R.id.LastPass);
         Loginbtn = findViewById(R.id.btnLogIn);
         progressBar = findViewById(R.id.progressBar);
-        videoView = findViewById(R.id.videoViewBackground);
         forgotPasswordButton = findViewById(R.id.btn_forgot_password);
 
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.mbgblur);
-        videoView.setVideoURI(uri);
-        videoView.setOnPreparedListener(mp -> {
-            mp.setLooping(true);
-            videoView.start();
-        });
 
         firebase = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

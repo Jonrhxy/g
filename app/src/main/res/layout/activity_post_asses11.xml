@@ -151,35 +151,39 @@
         <LinearLayout
             android:id="@+id/bttnchoice1"
             android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radiopostQ11">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radiopostQ11">
 
-        <Button
-            android:id="@+id/postq11"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_weight="1"
-            android:background="@drawable/preassesbtn"
-            android:text="@string/submit"
-            android:textSize="20sp" />
+            <Button
+                android:id="@+id/postq11"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnblue"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
+                android:text="@string/submit"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/postnext11"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="30dp"
-            android:layout_weight="1"
-            android:background="@drawable/preassesbtn"
-            android:text="@string/next"
-             android:textSize="20sp" />
+            <Button
+                android:id="@+id/postnext11"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnblue1"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
+                android:text="@string/next"
+                android:textSize="20sp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

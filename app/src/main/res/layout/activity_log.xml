@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ActivityLog">
+
+    <!-- Red Toolbar (Header) -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_activity_log"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/red"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Activity Log"
+        app:titleTextColor="@android:color/white"/>
+
+    <!-- Content Below the Toolbar -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="This is the Activity Log"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/game_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game finished in: 0 minutes"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

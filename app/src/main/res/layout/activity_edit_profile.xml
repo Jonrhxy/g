@@ -277,17 +277,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35sp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/delpass"
+                    android:text="@string/ResetPass"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
-                <EditText
-                    android:id="@+id/etDelPass"
+                <Button
+                    android:id="@+id/btnResPass"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
+                    android:layout_height="50dp"
+                    android:text="@string/ResetPass"
                     android:textColor="@color/BlckYellow"
-                    android:inputType="textEmailAddress"
                     android:layout_marginTop="4dp"
                     android:padding="12dp"
                     android:background="@drawable/edit_text_background" />

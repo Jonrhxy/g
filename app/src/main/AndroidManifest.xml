@@ -29,36 +29,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CVERDETOTOO"
         tools:targetApi="31">
-        <activity android:name=".MiniShopActivity" />
         <activity
-            android:name=".videoQCU"
+            android:name=".Shop"
             android:exported="false" />
-        <!-- Foreground Service for Notifications -->
+        <activity
+            android:name=".ActivityLog"
+            android:exported="false" /> <!-- Services -->
         <service
             android:name=".NotificationForegroundService"
             android:enabled="true"
             android:exported="false" />
-
-        <activity
-            android:name=".popupWelcome5"
-            android:exported="false" />
-        <activity
-            android:name=".popupWelcome4"
-            android:exported="false" />
-        <activity
-            android:name=".popupWelcome3"
-            android:exported="false" />
-        <activity
-            android:name=".popupWelcome2"
-            android:exported="false" /> <!-- Service and Meta-data from first manifest -->
         <service
             android:name=".TrackingService"
             android:exported="false"
-            android:foregroundServiceType="location" />
-
-        <meta-data
-            android:name="org.osmdroid.config"
-            android:value="osmdroid.config" /> <!-- Activities from first manifest -->
+            android:foregroundServiceType="location" /> <!-- Activities -->
+        <activity android:name=".MiniShopActivity" />
+        <activity
+            android:name=".videoQCU"
+            android:exported="false" />
         <activity
             android:name=".GPS"
             android:exported="false" />
@@ -186,7 +174,7 @@
             android:exported="false" />
         <activity
             android:name=".Settings"
-            android:exported="false" /> <!-- Additional activities from the second manifest -->
+            android:exported="false" /> <!-- Duplicate Activities from the first and second manifest merged -->
         <activity
             android:name=".PostAssess1After"
             android:exported="false" />

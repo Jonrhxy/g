@@ -149,33 +149,33 @@
 
     <ImageView
         android:id="@+id/playerDrawnCard"
-        android:layout_width="113dp"
-        android:layout_height="171dp"
+        android:layout_width="127dp"
+        android:layout_height="182dp"
         android:elevation="10dp"
         android:scaleType="centerInside"
         android:src="@drawable/placeholder_card"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.169"
+        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.412" />
+        app:layout_constraintVertical_bias="0.497" />
 
     <ImageView
         android:id="@+id/aiDrawnCard"
-        android:layout_width="113dp"
-        android:layout_height="171dp"
+        android:layout_width="127dp"
+        android:layout_height="182dp"
         android:elevation="10dp"
         android:scaleType="centerInside"
         android:src="@drawable/placeholder_card"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.83"
+        app:layout_constraintHorizontal_bias="0.799"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.412" />
+        app:layout_constraintVertical_bias="0.497" />
 
     <TextView
         android:id="@+id/battleLogText"
@@ -311,6 +311,26 @@
                 android:layout_height="wrap_content"
                 android:text="Back"
                 android:layout_margin="8dp" />
+
+            <Button
+                android:id="@+id/restartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restart"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:id="@+id/exitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exit"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp"/>
+
+
         </LinearLayout>
     </LinearLayout>
 

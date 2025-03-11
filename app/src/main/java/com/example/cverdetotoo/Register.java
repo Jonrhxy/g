@@ -94,13 +94,6 @@ public class Register extends AppCompatActivity {
             finish();
         });
 
-        VideoView videoView = findViewById(R.id.videoViewBackground);
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.mbgblur);
-        videoView.setVideoURI(uri);
-        videoView.setOnPreparedListener(mp -> {
-            mp.setLooping(true);
-            videoView.start();
-        });
     }
 
     // Helper method to validate names (only letters)

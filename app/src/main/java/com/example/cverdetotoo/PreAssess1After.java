@@ -45,7 +45,7 @@ public class PreAssess1After extends AppCompatActivity {
         scoreTextView.setText(String.valueOf(score));
 
         saveScoreToFirestore(score);
-        fetchCorrectAnswers();
+
 
         btnq1done.setOnClickListener(v -> {
             markPreAssessmentCompleted(); // Store completion in Firestore
@@ -75,26 +75,11 @@ public class PreAssess1After extends AppCompatActivity {
         }
     }
 
-    private void fetchCorrectAnswers() {
-        db.collection("quiz")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    StringBuilder sb = new StringBuilder();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String correctAnswer = document.getString("correctAnswer");
-                        if (correctAnswer != null) {
-                            sb.append(correctAnswer).append("\n");
-                        }
-                    }
-                    scoreTextView.append("\n" + sb.toString());
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(PreAssess1After.this, "Error fetching correct answers", Toast.LENGTH_SHORT).show());
-    }
+
 
     private void navigateToNavbar(int score) {
-        Intent intent = new Intent(this, video1.class);
-        intent.putExtra("isQuizDone", true);
+        Intent intent = new Intent(this, navbar.class);
+        intent.putExtra("isCompleted", true);
         intent.putExtra("score", score);
         startActivity(intent);
         finish();

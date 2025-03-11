@@ -15,7 +15,6 @@
         android:id="@+id/afterpre1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/pre1done"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="51dp"
         android:background="@drawable/textbgwhite"

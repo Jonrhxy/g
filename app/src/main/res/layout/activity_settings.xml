@@ -197,7 +197,7 @@
 
         <!-- Delete Password Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardDeletePass"
+            android:id="@+id/cardActivityLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="8dp"
@@ -218,7 +218,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/trash"
+                    android:src="@drawable/activity_log_icon"
                     android:contentDescription="@string/delpic"/>
 
                 <TextView
@@ -228,7 +228,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/poppinsmedium"
-                    android:text="@string/DeletePass"
+                    android:text="@string/ActLog"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 

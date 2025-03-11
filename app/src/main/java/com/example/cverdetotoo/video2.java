@@ -1,5 +1,6 @@
 package com.example.cverdetotoo;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,15 +21,15 @@ public class video2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video2);
+        setContentView(R.layout.activity_video1);
 
         // Initialize the VideoView, close button, and progress bar
-        storyVideo = findViewById(R.id.story_video2);
-        closeButton = findViewById(R.id.close_button2);
-        progressBar = findViewById(R.id.progress_bar2);
+        storyVideo = findViewById(R.id.story_video);
+        closeButton = findViewById(R.id.close_button);
+        progressBar = findViewById(R.id.progress_bar);
 
         // Load the video from the raw folder (replace 'vid1intro' with your actual file name)
-        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video2);
+        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.vid1intro);
         storyVideo.setVideoURI(videoUri);
 
         // Set a listener to know when the video is ready to play
@@ -46,6 +47,17 @@ public class video2 extends AppCompatActivity {
             }
         });
 
+        // Set a listener to redirect when the video completes
+        storyVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Redirect to PostAssess1 activity after video finishes
+                Intent intent = new Intent(video2.this, PostAssess1.class);
+                startActivity(intent);
+                finish(); // Optional: finish current activity if you don't want users to return here
+            }
+        });
+
         // Close the video view when the close button is pressed
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +65,6 @@ public class video2 extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     // Runnable to update the progress bar every 100ms

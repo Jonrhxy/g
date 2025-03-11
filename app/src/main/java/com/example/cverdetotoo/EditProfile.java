@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class EditProfile extends AppCompatActivity {
     private String originalBirthDate;
     private String originalGender;
 
+    private Button resetPasswordButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,10 @@ public class EditProfile extends AppCompatActivity {
         rbFemale = findViewById(R.id.rbFemale);
         rbMale = findViewById(R.id.rbMale);
         rbOthers = findViewById(R.id.rbOthers);
+        resetPasswordButton = findViewById(R.id.btnResPass);
         tvSaveChanges = findViewById(R.id.tvSaveChanges);
+
+
     }
 
     /**
@@ -97,6 +102,9 @@ public class EditProfile extends AppCompatActivity {
 
         // Show DatePicker when clicking the birth date field
         etBirthDate.setOnClickListener(view -> showDatePickerDialog());
+
+
+        resetPasswordButton.setOnClickListener(v -> resetPassword());
 
         // Handle the save changes button click
         tvSaveChanges.setOnClickListener(view -> {
@@ -251,10 +259,41 @@ public class EditProfile extends AppCompatActivity {
     /**
      * Redirects to the Navbar activity.
      */
+    private void resetPassword() {
+        String email = etEmail.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            etEmail.setError("Enter your registered email.");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Enter a valid email.");
+            etEmail.requestFocus();
+            return;
+        }
+
+        sendPasswordResetEmail(email);
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(EditProfile.this, "Reset email sent successfully. Check your inbox.", Toast.LENGTH_SHORT).show();
+                        redirectToNavbar();
+                    } else {
+                        Toast.makeText(EditProfile.this, "Error sending reset email. Try again.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void redirectToNavbar() {
-        Intent intent = new Intent(EditProfile.this, navbar.class); // Ensure Navbar is declared in AndroidManifest.xml
+        Intent intent = new Intent(EditProfile.this, navbar.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
+
 }

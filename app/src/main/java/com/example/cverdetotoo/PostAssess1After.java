@@ -45,7 +45,7 @@ public class PostAssess1After extends AppCompatActivity {
         scoreTextView.setText(String.valueOf(score));
 
         saveScoreToFirestore(score);
-        fetchCorrectAnswers();
+
 
         btnq1done.setOnClickListener(v -> {
             markPreAssessmentCompleted(); // Store completion in Firestore
@@ -63,7 +63,7 @@ public class PostAssess1After extends AppCompatActivity {
             scoreData.put("isCompleted", true); // Mark quiz as completed
             scoreData.put("username", username);
 
-            db.collection("PreAssess")
+            db.collection("PostAssess")
                     .document(username)
                     .set(scoreData)
                     .addOnSuccessListener(aVoid ->
@@ -75,26 +75,11 @@ public class PostAssess1After extends AppCompatActivity {
         }
     }
 
-    private void fetchCorrectAnswers() {
-        db.collection("quiz")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    StringBuilder sb = new StringBuilder();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String correctAnswer = document.getString("correctAnswer");
-                        if (correctAnswer != null) {
-                            sb.append(correctAnswer).append("\n");
-                        }
-                    }
-                    scoreTextView.append("\n" + sb.toString());
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(PostAssess1After.this, "Error fetching correct answers", Toast.LENGTH_SHORT).show());
-    }
+
 
     private void navigateToNavbar(int score) {
-        Intent intent = new Intent(this, HomeFragment.class);
-        intent.putExtra("isQuizDone", true);
+        Intent intent = new Intent(this, navbar.class);
+        intent.putExtra("isCompleted", true);
         intent.putExtra("score", score);
         startActivity(intent);
         finish();
@@ -103,7 +88,7 @@ public class PostAssess1After extends AppCompatActivity {
     private void markPreAssessmentCompleted() {
         String username = auth.getCurrentUser() != null ? auth.getCurrentUser().getDisplayName() : null;
         if (username != null) {
-            DocumentReference docRef = db.collection("PreAssess").document(username);
+            DocumentReference docRef = db.collection("PostAssess").document(username);
             docRef.update("isCompleted", true)
                     .addOnSuccessListener(aVoid ->
                             Toast.makeText(PostAssess1After.this, "Assessment marked as completed", Toast.LENGTH_SHORT).show())
