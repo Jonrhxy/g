@@ -1,6 +1,6 @@
 <resources>
     <!-- GET GTART TO LOGIN -->
-    <string name="app_name">CVERDETOTOO</string>
+    <string name="app_name">CVerde</string>
     <string name="getstartbtn">\n</string>
     <string name="Email_Uname">Email/Username</string>
     <string name="getstart">Click anywhere to start!</string>

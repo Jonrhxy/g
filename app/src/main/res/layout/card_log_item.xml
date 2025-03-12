@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header title (e.g., "Date: 20250308") or could be empty for detail cards -->
+        <TextView
+            android:id="@+id/cardHeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Header Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <!-- Content (e.g., record details) -->
+        <TextView
+            android:id="@+id/cardHeaderContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Card Content"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

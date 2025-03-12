@@ -1,8 +1,10 @@
 package com.example.cverdetotoo;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,10 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
 import org.opencv.android.OpenCVLoader;
@@ -39,11 +44,13 @@ import java.util.List;
 
 public class Bfast1Fragment extends AppCompatActivity {
 
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
+
     private TextView textViewResult;
     private TextView textViewScore;
     private ImageView imageViewInput;
     private Button buttonTakePhoto;
-    private Button buttonUploadImage;  // New button for gallery upload
+    private Button buttonUploadImage;  // Button for gallery upload
 
     // ImageView for your character (shown/hidden as needed)
     private ImageView imageViewCharacter;
@@ -86,7 +93,7 @@ public class Bfast1Fragment extends AppCompatActivity {
         textViewScore = findViewById(R.id.textViewScore);
         imageViewInput = findViewById(R.id.imageViewInput);
         buttonTakePhoto = findViewById(R.id.buttonTakePhoto);
-        buttonUploadImage = findViewById(R.id.buttonUploadImage); // New button
+        buttonUploadImage = findViewById(R.id.buttonUploadImage);
         imageViewCharacter = findViewById(R.id.imageViewCharacter);
         textViewChatBubble = findViewById(R.id.textViewChatBubble);
 
@@ -159,16 +166,40 @@ public class Bfast1Fragment extends AppCompatActivity {
         bounceCharacter(imageViewCharacter);
         showChatBubble("Welcome! Let's work together for a low-carbon lunch!", true, 5000);
 
-        // Button click: launch camera immediately.
+        // Button click: launch camera after checking for permission.
         buttonTakePhoto.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            cameraLauncher.launch(cameraIntent);
+            if (ContextCompat.checkSelfPermission(Bfast1Fragment.this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(Bfast1Fragment.this,
+                        new String[]{Manifest.permission.CAMERA},
+                        CAMERA_PERMISSION_REQUEST_CODE);
+            } else {
+                launchCamera();
+            }
         });
 
         // New button click: launch gallery to pick an image.
         buttonUploadImage.setOnClickListener(v -> {
             galleryLauncher.launch("image/*");
         });
+    }
+
+    // Launches the camera intent.
+    private void launchCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraLauncher.launch(cameraIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                launchCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required to take photos.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**

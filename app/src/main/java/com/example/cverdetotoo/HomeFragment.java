@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
             activity.getSupportActionBar().hide();
         }
 
-        // Existing code for fetching popup data, deletion schedule, and setting up activity launchers...
+        // Fetch popup data and check deletion schedule.
         fetchPopupDataAndShow();
         checkDeletionSchedule();
 
@@ -143,11 +143,11 @@ public class HomeFragment extends Fragment {
         });
 
         // Add animation for the mascot.
-        // Make sure your layout (activity_home.xml) includes an ImageView with the ID ivMascot.
+        // Slower and shorter movement: translationX from 0 to 50 over 2.5 seconds.
         ImageView ivMascot = view.findViewById(R.id.ivMascot);
         if (ivMascot != null) {
-            ObjectAnimator mascotAnimator = ObjectAnimator.ofFloat(ivMascot, "translationX", 0f, 100f);
-            mascotAnimator.setDuration(1000); // 1 second duration
+            ObjectAnimator mascotAnimator = ObjectAnimator.ofFloat(ivMascot, "translationX", 0f, 50f);
+            mascotAnimator.setDuration(2500); // 2.5 seconds duration
             mascotAnimator.setInterpolator(new LinearInterpolator());
             mascotAnimator.setRepeatCount(ObjectAnimator.INFINITE);
             mascotAnimator.setRepeatMode(ObjectAnimator.REVERSE);
