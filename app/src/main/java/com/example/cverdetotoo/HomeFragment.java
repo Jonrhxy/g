@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.animation.ObjectAnimator;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -47,14 +50,23 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment.
         View root = inflater.inflate(R.layout.activity_home, container, false);
+        return root;
+    }
 
-        // Fetch the welcome popup data.
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Hide the action bar for this fragment.
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().hide();
+        }
+
+        // Existing code for fetching popup data, deletion schedule, and setting up activity launchers...
         fetchPopupDataAndShow();
-
-        // Check if the account deletion is scheduled and show the prompt if so.
         checkDeletionSchedule();
 
-        // Register the ActivityResultLauncher for PreAssess activities.
         preAssessLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -70,9 +82,9 @@ public class HomeFragment extends Fragment {
         );
 
         // Set click listeners for video cards.
-        CardView vid1Card = root.findViewById(R.id.vid1);
-        CardView vid2Card = root.findViewById(R.id.vid2);
-        CardView vid4Card = root.findViewById(R.id.vid4);
+        CardView vid1Card = view.findViewById(R.id.vid1);
+        CardView vid2Card = view.findViewById(R.id.vid2);
+        CardView vid4Card = view.findViewById(R.id.vid4);
         vid1Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,10 +108,10 @@ public class HomeFragment extends Fragment {
         });
 
         // Set click listeners for trivia cards.
-        CardView trivia1Card = root.findViewById(R.id.trivia1);
-        CardView trivia2Card = root.findViewById(R.id.trivia2);
-        CardView trivia3Card = root.findViewById(R.id.trivia3);
-        CardView trivia4Card = root.findViewById(R.id.trivia4);
+        CardView trivia1Card = view.findViewById(R.id.trivia1);
+        CardView trivia2Card = view.findViewById(R.id.trivia2);
+        CardView trivia3Card = view.findViewById(R.id.trivia3);
+        CardView trivia4Card = view.findViewById(R.id.trivia4);
 
         trivia1Card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +142,17 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        return root;
+        // Add animation for the mascot.
+        // Make sure your layout (activity_home.xml) includes an ImageView with the ID ivMascot.
+        ImageView ivMascot = view.findViewById(R.id.ivMascot);
+        if (ivMascot != null) {
+            ObjectAnimator mascotAnimator = ObjectAnimator.ofFloat(ivMascot, "translationX", 0f, 100f);
+            mascotAnimator.setDuration(1000); // 1 second duration
+            mascotAnimator.setInterpolator(new LinearInterpolator());
+            mascotAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+            mascotAnimator.setRepeatMode(ObjectAnimator.REVERSE);
+            mascotAnimator.start();
+        }
     }
 
     /**
@@ -151,7 +173,6 @@ public class HomeFragment extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Use the username as the document ID.
         DocumentReference popupRef = db.collection("popups").document(username);
 
         popupRef.get()
@@ -169,15 +190,11 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error fetching popup data.", e);
-                        // Fallback: show the popup and update Firestore.
-                        Intent intent = new Intent(getActivity(), popupWelcome.class);
-                        startActivity(intent);
-                        popupRef.set(Collections.singletonMap("popup5", true));
-                    }
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error fetching popup data.", e);
+                    Intent intent = new Intent(getActivity(), popupWelcome.class);
+                    startActivity(intent);
+                    popupRef.set(Collections.singletonMap("popup5", true));
                 });
     }
 
@@ -269,15 +286,5 @@ public class HomeFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // Hide the action bar for this fragment.
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().hide();
-        }
     }
 }

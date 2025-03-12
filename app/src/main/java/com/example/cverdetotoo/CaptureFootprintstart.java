@@ -22,11 +22,11 @@ public class CaptureFootprintstart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Make sure activity_battle_eco_start.xml is in res/layout
-        setContentView(R.layout.activity_battle_eco_start);
+        setContentView(R.layout.activity_capture_footprintstart);
 
         // Find views by ID
-        View parentLayout = findViewById(R.id.parentLayout);
-        final TextView tvFact = findViewById(R.id.tvFact);
+        View parentLayout = findViewById(R.id.parentLayout1);
+        final TextView tvFact = findViewById(R.id.tvFact1);
 
         // (Optional) Show the first fact immediately
         // tvFact.setText(facts[currentFactIndex]);

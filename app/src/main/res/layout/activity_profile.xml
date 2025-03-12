@@ -593,7 +593,6 @@
                         android:padding="16dp"
                         android:background="@drawable/bgbrown">
 
-                        <!-- "activity log" bubble at the top-right -->
                         <TextView
                             android:id="@+id/textActivityLogHistoryTitle"
                             android:layout_width="wrap_content"
@@ -605,7 +604,9 @@
                             android:textColor="@android:color/white"
                             android:textSize="17sp"
                             android:textStyle="bold"
-                            android:layout_marginBottom="12dp"/>
+                            android:layout_marginBottom="12dp"
+                            android:clickable="true"
+                            android:focusable="true"/>
 
                         <!-- First date + logs -->
                         <TextView
