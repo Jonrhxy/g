@@ -296,14 +296,22 @@
             android:background="@drawable/dialog_rounded_shape"
             android:gravity="center">
 
-            <TextView
-                android:id="@+id/instructionsText"
-                android:layout_width="wrap_content"
+            <ScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/instructionsScrollView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Instructions:\n1. Draw cards to attack or defend.\n2. Use energy wisely.\n3. Defeat all bosses within 10 minutes!"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="16dp"
-                android:textSize="16sp" />
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/instructionsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Instructions:\n\nCard Types and Their Uses:\n• Attack Cards: Use these cards to damage the enemy. For example, 'Reforest Revival' deals 60 damage and heals you for 40 HP.\n• Healing Cards: These cards restore your health. For example, 'Nature’s Embrace' heals 30 HP and provides extra energy.\n• Defense Cards: Use defense cards to add shield points that absorb enemy attacks. Cards like 'Green Shield', 'Eco Barrier', and 'Carbon Guard' provide different levels of protection and sometimes deal bonus damage.\n• Energy Cards: These cards increase your energy so you can play more cards during your turn. For instance, 'Forest Aura' gives you extra energy at no cost.\n\nEnergy Management:\n• Each card requires a specific amount of energy to play. Plan your moves carefully so you have enough energy for the most effective card in each turn.\n\nGame Objective:\n• Your goal is to defeat the boss by reducing its health to zero while managing your health, shields, and energy effectively.\n• You have 5 minutes to complete the battle. Every decision counts!\n\nRemember: Your card choices shape your strategy. Use the right card at the right time to win the battle!"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:lineSpacingExtra="4dp" />
+            </ScrollView>
 
             <Button
                 android:id="@+id/backButton"
@@ -311,26 +319,6 @@
                 android:layout_height="wrap_content"
                 android:text="Back"
                 android:layout_margin="8dp" />
-
-            <Button
-                android:id="@+id/restartButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Restart"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"/>
-
-            <Button
-                android:id="@+id/exitButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Exit"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"/>
-
-
         </LinearLayout>
     </LinearLayout>
 

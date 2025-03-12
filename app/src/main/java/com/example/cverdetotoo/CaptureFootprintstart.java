@@ -39,7 +39,7 @@ public class CaptureFootprintstart extends AppCompatActivity {
                 Toast.makeText(CaptureFootprintstart.this, "Screen tapped!", Toast.LENGTH_SHORT).show();
 
                 // Navigate to NextActivity when the screen is tapped
-                Intent intent = new Intent(CaptureFootprintstart.this, BattleEcoActivity.class);
+                Intent intent = new Intent(CaptureFootprintstart.this, Bfast1Fragment.class);
                 startActivity(intent);
             }
         });

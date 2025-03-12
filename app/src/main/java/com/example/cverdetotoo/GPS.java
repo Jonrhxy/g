@@ -87,10 +87,10 @@ public class GPS extends AppCompatActivity implements LocationListener {
     private static final String KEY_SESSION_ID = "session_id";
 
     // Emission factors
-    private static final double EMISSION_FACTOR_CAR = 0.25;
-    private static final double EMISSION_FACTOR_BUS = 0.08;
-    private static final double EMISSION_FACTOR_MOTORCYCLE = 0.10;
-    private static final double EMISSION_FACTOR_JEEPNEY = 0.15;
+    private static final double EMISSION_FACTOR_CAR = 0.23;
+    private static final double EMISSION_FACTOR_MOTORCYCLE = 0.092;
+    private static final double EMISSION_FACTOR_BUS = 0.045;
+    private static final double EMISSION_FACTOR_JEEPNEY = 0.06;
     private static final double EMISSION_FACTOR_TRUCK = 0.30;
 
     // Tracking states and modes
@@ -116,6 +116,8 @@ public class GPS extends AppCompatActivity implements LocationListener {
     private long accumulatedActiveTime = 0; // in ms
     private long sessionStartTime = 0;
     private boolean isBadgePopupShown = false;
+    private boolean goalReached = false;
+
 
     // Firestore
     private FirebaseFirestore db;
@@ -466,8 +468,12 @@ public class GPS extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        // If the goal is reached, ignore new location updates.
+        if (goalReached) return;
+
         if (trackingState != TrackingState.RUNNING) return;
         if (location.hasAccuracy() && location.getAccuracy() > ACCURACY_THRESHOLD) return;
+
         if (!locations.isEmpty()) {
             Location lastLocation = locations.get(locations.size() - 1);
             float distanceDelta = lastLocation.distanceTo(location);
@@ -485,6 +491,7 @@ public class GPS extends AppCompatActivity implements LocationListener {
         routeLine.setPoints(Collections.emptyList());
         mapView.invalidate();
     }
+
 
     private void updatePolyline() {
         try {
@@ -512,6 +519,9 @@ public class GPS extends AppCompatActivity implements LocationListener {
     }
 
     private void updateStats() {
+        // If goal is reached, do not update further.
+        if (goalReached) return;
+
         try {
             long elapsedTime = accumulatedActiveTime;
             if (trackingState == TrackingState.RUNNING) {
@@ -526,7 +536,9 @@ public class GPS extends AppCompatActivity implements LocationListener {
             String distanceString = String.format(Locale.getDefault(), "%.2f", distanceKm);
 
             int realStepCount = (int) (distanceKm * STEPS_PER_KM);
-            if (realStepCount >= GOAL_STEPS) { realStepCount = GOAL_STEPS; }
+            if (realStepCount >= GOAL_STEPS) {
+                realStepCount = GOAL_STEPS;
+            }
             textStepsValue.setText(String.valueOf(realStepCount));
             progressSteps.setProgress(Math.min(realStepCount, GOAL_STEPS));
 
@@ -546,6 +558,7 @@ public class GPS extends AppCompatActivity implements LocationListener {
                 default:
                     emissionFactor = EMISSION_FACTOR_CAR; modeText = "car"; break;
             }
+
             double emissionSaved = distanceKm * emissionFactor;
             textCarbonEmission.setText(String.format(Locale.getDefault(),
                     "Walking saved %.2f kg CO₂ vs. using a %s.", emissionSaved, modeText));
@@ -553,16 +566,56 @@ public class GPS extends AppCompatActivity implements LocationListener {
             textDistanceValue.setText(distanceString);
             textTimeValue.setText(timeString);
 
-            int startColor = Color.parseColor("#00215E");
-            int endColor = Color.parseColor("#2C4E80");
+            int startColor = Color.parseColor("#BF3100");
+            int endColor = Color.parseColor("#000000");
             applyGradientToText(textDistanceValue, startColor, endColor);
             applyGradientToText(textTimeValue, startColor, endColor);
             applyGradientToText(textStepsValue, startColor, endColor);
+
+            // If the goal is reached, stop tracking and show the badge popup
+            if (realStepCount >= GOAL_STEPS && !isBadgePopupShown) {
+                // Mark goal as reached so no further updates are applied.
+                goalReached = true;
+                pauseTracking();
+                stopTrackingService();
+                showBadgePopup();
+                isBadgePopupShown = true;
+            }
         } catch (Exception e) {
             Log.e(TAG, "Error updating stats: " + e.getMessage());
         }
     }
 
+
+
+    private void showBadgePopup() {
+        try {
+            Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.popup_badge_earned);
+            dialog.setCancelable(false);
+
+            TextView textBadgeLabel = dialog.findViewById(R.id.textBadgeLabel);
+            TextView textTitle = dialog.findViewById(R.id.textTitle);
+            TextView textSubMessage = dialog.findViewById(R.id.textSubMessage);
+            Button buttonContinue = dialog.findViewById(R.id.buttonContinue);
+
+            textBadgeLabel.setText("Gold Star Badge");
+            textTitle.setText("Well done!");
+            textSubMessage.setText("You’ve earned the Gold Star Badge for tracking your travel!");
+
+            buttonContinue.setOnClickListener(v -> {
+                dialog.dismiss();
+                // Navigate to the activity hosting GameFragment (e.g., GameActivity)
+                Intent intent = new Intent(GPS.this, GameFragment.class);
+                startActivity(intent);
+                finish();
+            });
+            dialog.show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing badge popup: " + e.getMessage());
+        }
+    }
     private void createInitialTrackingRecord() {
         try {
             if (currentSessionId == null) {
@@ -690,28 +743,6 @@ public class GPS extends AppCompatActivity implements LocationListener {
             mapView.getController().setCenter(new GeoPoint(latitude, longitude));
         } catch (Exception e) {
             Log.e(TAG, "Error zooming to location: " + e.getMessage());
-        }
-    }
-
-    private void showBadgePopup() {
-        try {
-            Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.popup_badge_earned);
-            dialog.setCancelable(false);
-
-            TextView textBadgeLabel = dialog.findViewById(R.id.textBadgeLabel);
-            TextView textTitle = dialog.findViewById(R.id.textTitle);
-            TextView textSubMessage = dialog.findViewById(R.id.textSubMessage);
-            Button buttonContinue = dialog.findViewById(R.id.buttonContinue);
-
-            textBadgeLabel.setText("Gold Star Badge");
-            textTitle.setText("Well done!");
-            textSubMessage.setText("You’ve earned the Gold Star Badge for tracking your travel!");
-            buttonContinue.setOnClickListener(v -> dialog.dismiss());
-            dialog.show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing badge popup: " + e.getMessage());
         }
     }
 

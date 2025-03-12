@@ -12,13 +12,13 @@
         android:orientation="vertical"
         android:background="@drawable/homeblue">
 
-        <!-- Top container with gradient background -->
+        <!-- Top container (red banner) -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@drawable/mainbg1">
 
-            <!-- "Home" title (or could be an AppBar) -->
+            <!-- "Home" title -->
             <TextView
                 android:id="@+id/tvHomeTitle"
                 android:layout_width="wrap_content"
@@ -26,32 +26,29 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/home"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:fontFamily="@font/poppins_bold"/>
 
-            <!-- A small welcome message -->
-            <TextView
+            <!-- TypeWriterView: rectangular text area on the left -->
+            <com.example.cverdetotoo.TypeWriterView
                 android:id="@+id/tvWelcome"
-                android:layout_width="match_parent"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="80dp"
-                android:layout_marginStart="20dp"
-                android:fontFamily="@font/poppins_semibold_italic"
-                android:text="@string/welcomee"
-                android:textColor="@color/white"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="120dp"
+                android:textColor="@android:color/white"
                 android:textSize="14sp"
-                android:layout_marginTop="45dp"/>
+                android:fontFamily="@font/poppins_semibold_italic" />
 
-            <!-- Character or mascot image aligned to the right -->
+            <!-- Character image on the right -->
             <ImageView
                 android:id="@+id/ivMascot"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginTop="24dp"
                 android:paddingStart="20dp"
-                android:layout_gravity="end|center_vertical"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/boychar"
                 android:adjustViewBounds="true"/>
@@ -311,7 +308,7 @@
                 android:textColor="#FFF3F6" />
         </LinearLayout>
 
-        <!-- Add any other sections you need -->
+        <!-- Add any other sections you need here -->
 
     </LinearLayout>
 </ScrollView>

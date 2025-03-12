@@ -91,13 +91,18 @@ dependencies {
 
     // Guava dependency for ListenableFuture
     implementation("com.google.guava:guava:31.1-android")
+    implementation(project(":sdkk"))
 
     // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    //tensorflow lite
     implementation("org.tensorflow:tensorflow-lite:2.11.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.0")
     implementation ("com.airbnb.android:lottie:5.2.0")
+
+    // Use the local OpenCV SDK module (imported as :sdk)
+    implementation(project(":sdkk"))
 }

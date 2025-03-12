@@ -15,14 +15,31 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- The rectangle confetti banner -->
-        <ImageView
-            android:id="@+id/imageBanner"
+        <!-- FrameLayout so we can overlay banner and banner2 -->
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/banner" />
+            android:layout_height="wrap_content">
+
+            <!-- The first banner image -->
+            <ImageView
+                android:id="@+id/imageBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/banner" />
+
+            <!-- The second image overlay (banner2) -->
+            <ImageView
+                android:id="@+id/imageBanner2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/banner2" />
+
+        </FrameLayout>
 
         <!-- The triangle tail at the bottom center -->
         <ImageView
@@ -30,13 +47,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/tail_banner"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:src="@drawable/tail_banner" />
     </LinearLayout>
 
-    <!-- 2) Overlay content on top of the banner -->
-    <!--    Use match_parent so it overlaps the rectangle portion. -->
+    <!-- 2) Overlay content on top of the combined banner area -->
     <LinearLayout
         android:id="@+id/layoutContent"
         android:layout_width="382dp"
@@ -97,4 +113,5 @@
             android:textColor="@android:color/white" />
 
     </LinearLayout>
+
 </FrameLayout>

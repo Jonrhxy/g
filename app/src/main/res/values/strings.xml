@@ -11,6 +11,7 @@
     <string name="logo">\n</string>
 
     <!-- HOMEPAGE -->
+    <string name="image_input">Appear</string>
     <string name="vid">Videos</string>
     <string name="trivia">Trivia</string>
     <string name="trivia1">Carbon Footprint</string>

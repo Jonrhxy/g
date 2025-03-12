@@ -25,16 +25,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import android.util.Log;
+import java.util.Random;
 
 public class BattleEcoActivity extends AppCompatActivity {
 
@@ -61,16 +61,21 @@ public class BattleEcoActivity extends AppCompatActivity {
     private int playerShield = 0, computerShield = 0;
     private int playerEnergy = 3, computerEnergy = 3;
     private int currentBossIndex = 0;
-    private long timeRemaining; // in milliseconds
+    private long timeRemaining = 300000; // 5 minutes in milliseconds
 
     // Track if game is over
     private boolean gameIsOver = false;
 
+    // Additional state: Whose turn it is
+    private boolean isPlayerTurn = false;
+
+    // Persist last drawn card images (resource IDs)
+    private int lastPlayerCardResId = -1;
+    private int lastAICardResId = -1;
+
     // Game objects and card decks
     private PlayerCard playerCard, computer;
-    // Player deck: Cards 1-4 (player-only) + shield cards (5-7)
     private List<BattleCard> playerDeck;
-    // AI deck: Shield cards (5-7) + AI-only cards (8-11)
     private List<BattleCard> aiDeck;
     private List<BattleCard> playerHand;
 
@@ -98,6 +103,21 @@ public class BattleEcoActivity extends AppCompatActivity {
             energyHandler.postDelayed(this, 30000);
         }
     };
+
+    // Total game time constant for eco tip calculations.
+    private final int TOTAL_GAME_TIME = 300000; // 5 minutes
+
+    // Eco Tip arrays: texts, durations, and sound resource IDs.
+    private String[] ecoTipTexts = {
+            "Did you know? Walking 5 km instead of driving can save roughly 1 kg of CO₂ emissions, depending on your vehicle's efficiency.",
+            "Did you know? Switching to LED bulbs can reduce your energy consumption by up to 80%, cutting both your energy bills and carbon footprint.",
+            "Did you know? Recycling one ton of paper saves about 17 trees and can cut CO₂ emissions by around 3 tons.",
+            "Did you know? Using public transportation or carpooling can reduce your carbon footprint by about 30% compared to solo driving.",
+            "Did you know? A single mature tree can absorb roughly 21 kg of CO₂ annually, helping to improve air quality."
+    };
+    private int[] ecoTipDurations = {10500, 10200, 8700, 9200, 9400}; // in milliseconds
+    private int[] ecoTipSoundRes = { R.raw.ecotip1, R.raw.ecotip2, R.raw.ecotip3, R.raw.ecotip4, R.raw.ecotip5 };
+    private int nextEcoTipIndex = 0; // tracks which eco tip to show next
 
     // Flag to track mute state.
     private boolean isMuted = false;
@@ -141,7 +161,7 @@ public class BattleEcoActivity extends AppCompatActivity {
         instructionsPanel = findViewById(R.id.instructionsPanel);
         backButton = findViewById(R.id.backButton);
 
-        // Initially, ensure the pause and instructions panels are hidden.
+        // Initially, hide pause and instructions panels.
         pausePanel.setVisibility(View.GONE);
         instructionsPanel.setVisibility(View.GONE);
 
@@ -182,8 +202,8 @@ public class BattleEcoActivity extends AppCompatActivity {
         backgroundMusic.setLooping(true);
         backgroundMusic.start();
 
-        // Set player character image.
-        playerCharacterImage.setImageResource(R.drawable.main_character);
+        // Set player character image based on equipped character.
+        updatePlayerCharacterImage();
 
         // Load saved game state.
         loadGameState();
@@ -197,8 +217,7 @@ public class BattleEcoActivity extends AppCompatActivity {
         View root = findViewById(R.id.battleEcoRoot);
         root.setBackgroundResource(BACKGROUNDS[0]);
 
-        // Define separate decks.
-        // Player deck: Cards 1–4 (player-only) and shield cards (5–7)
+        // Define decks.
         playerDeck = new ArrayList<>();
         playerDeck.add(new BattleCard(CardType.SLASH, 60,
                 "Reforest Revival (60 damage, 40 heal, 2 Energy)", R.drawable.card1));
@@ -208,7 +227,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 "Piercing Staff (35 damage, +20 shield, 1 Energy)", R.drawable.card3));
         playerDeck.add(new BattleCard(CardType.ENERGY, 0,
                 "Forest Aura (+1 Energy, 0 Energy Cost)", R.drawable.card4));
-        // Shield cards (cards 5–7)
         playerDeck.add(new BattleCard(CardType.SHIELD, 5,
                 "Green Shield (+15 shield, 5 damage, 0 Energy)", R.drawable.card5));
         playerDeck.add(new BattleCard(CardType.SHIELD, 5,
@@ -216,7 +234,6 @@ public class BattleEcoActivity extends AppCompatActivity {
         playerDeck.add(new BattleCard(CardType.SHIELD, 10,
                 "Carbon Guard (+25 shield, 10 damage, 1 Energy)", R.drawable.card7));
 
-        // AI deck: Shield cards (5–7) plus AI-only cards (8–11)
         aiDeck = new ArrayList<>();
         aiDeck.add(new BattleCard(CardType.SHIELD, 5,
                 "Green Shield (+15 shield, 5 damage, 0 Energy)", R.drawable.card5));
@@ -233,11 +250,29 @@ public class BattleEcoActivity extends AppCompatActivity {
         aiDeck.add(new BattleCard(CardType.SHIELD, 0,
                 "Pollution Moon (+25 shield, 0 Energy)", R.drawable.card11));
 
-        // Roll dice to decide who goes first.
-        handler.postDelayed(this::rollForFirstTurn, 1000);
+        // Restore last drawn card images if available.
+        if (lastPlayerCardResId != -1) {
+            playerDrawnCard.setImageResource(lastPlayerCardResId);
+            playerDrawnCard.setVisibility(View.VISIBLE);
+        }
+        if (lastAICardResId != -1) {
+            aiDrawnCard.setImageResource(lastAICardResId);
+            aiDrawnCard.setVisibility(View.VISIBLE);
+        }
+
+        // Determine whose turn it is.
+        if (playerHand != null && !playerHand.isEmpty() && isPlayerTurn) {
+            showHandSelection();
+        } else if (!isPlayerTurn) {
+            handler.postDelayed(this::processComputerTurn, 1000);
+        } else {
+            handler.postDelayed(this::rollForFirstTurn, 1000);
+        }
+
+        // Record game start time.
+        gameStartTime = System.currentTimeMillis();
 
         // Start game timer.
-        gameStartTime = System.currentTimeMillis();
         gameTimer = new CountDownTimer(timeRemaining, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -246,6 +281,15 @@ public class BattleEcoActivity extends AppCompatActivity {
                 int minutes = secondsRemaining / 60;
                 int seconds = secondsRemaining % 60;
                 timerText.setText(String.format("⏰ %02d:%02d", minutes, seconds));
+
+                // Calculate minute index (0-based) that has passed.
+                int minuteIndex = (int) ((TOTAL_GAME_TIME - timeRemaining) / 60000);
+                if (minuteIndex > nextEcoTipIndex && nextEcoTipIndex < ecoTipTexts.length) {
+                    // Show eco tip dialogue with corresponding sound.
+                    showEcoTipDialogueUnskippable(ecoTipTexts[nextEcoTipIndex], ecoTipDurations[nextEcoTipIndex],
+                            ecoTipSoundRes[nextEcoTipIndex]);
+                    nextEcoTipIndex++;
+                }
             }
             @Override
             public void onFinish() {
@@ -256,15 +300,21 @@ public class BattleEcoActivity extends AppCompatActivity {
             }
         }.start();
 
-        // Start energy gain every 30 seconds.
         energyHandler.postDelayed(energyRunnable, 30000);
-
         updateUI();
     }
 
-    // ------------------------------------------------------------------------
-    // Lifecycle Overrides
-    // ------------------------------------------------------------------------
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(backgroundMusic != null && !backgroundMusic.isPlaying() && !isMuted){
+            backgroundMusic.start();
+        }
+        startGameTimer();
+        energyHandler.postDelayed(energyRunnable, 30000);
+        updatePlayerCharacterImage();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -273,17 +323,9 @@ public class BattleEcoActivity extends AppCompatActivity {
         }
         if (gameIsOver) {
             SharedPreferences prefs = getSharedPreferences("BattleEcoPrefs", MODE_PRIVATE);
-            prefs.edit().clear().commit();
+            prefs.edit().clear().apply();
         } else {
             saveGameState();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(backgroundMusic != null && !backgroundMusic.isPlaying() && !isMuted){
-            backgroundMusic.start();
         }
     }
 
@@ -299,6 +341,65 @@ public class BattleEcoActivity extends AppCompatActivity {
             gameTimer.cancel();
         }
         energyHandler.removeCallbacks(energyRunnable);
+    }
+
+    // ------------------------------------------------------------------------
+    // NEW: Eco Tip Dialogue Method (Unskippable with Sound)
+    // ------------------------------------------------------------------------
+    /**
+     * Displays an eco tip dialogue with the provided message.
+     * The dialogue is unskippable (close button hidden) and auto-dismisses after durationMs milliseconds.
+     * Also plays the provided sound resource.
+     *
+     * @param ecoTip     The eco tip message.
+     * @param durationMs Duration in milliseconds before auto-dismiss.
+     * @param soundResId The raw resource ID for the eco tip sound.
+     */
+    private void showEcoTipDialogueUnskippable(String ecoTip, int durationMs, int soundResId) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_npc_explanation, null);
+        TextView npcMessage = dialogView.findViewById(R.id.npcMessage);
+        TextView npcCloseButton = dialogView.findViewById(R.id.npcCloseButton);
+        npcCloseButton.setVisibility(View.GONE); // Hide the close button.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.TransparentFullScreenDialog);
+        builder.setView(dialogView);
+        final AlertDialog ecoDialog = builder.create();
+        ecoDialog.setCanceledOnTouchOutside(false);
+        ecoDialog.setCancelable(false);
+        if(ecoDialog.getWindow() != null){
+            ecoDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+        animateText(npcMessage, ecoTip, 0);
+        ecoDialog.show();
+
+        // Play the eco tip sound.
+        MediaPlayer ecoTipSoundPlayer = MediaPlayer.create(BattleEcoActivity.this, soundResId);
+        ecoTipSoundPlayer.start();
+        ecoTipSoundPlayer.setOnCompletionListener(mp -> mp.release());
+
+        // Auto-dismiss after durationMs.
+        new Handler().postDelayed(() -> ecoDialog.dismiss(), durationMs);
+    }
+
+    // ------------------------------------------------------------------------
+    // Helper: Update Player Character Image
+    // ------------------------------------------------------------------------
+    private void updatePlayerCharacterImage() {
+        SharedPreferences gamePrefs = getSharedPreferences("GamePrefs", MODE_PRIVATE);
+        String selectedCharacterId = gamePrefs.getString("selectedCharacterId", "char001");
+        String json = gamePrefs.getString("characters", null);
+        if (json != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<CharacterModel>>() {}.getType();
+            List<CharacterModel> characters = gson.fromJson(json, type);
+            for (CharacterModel character : characters) {
+                if (character.getId().equals(selectedCharacterId)) {
+                    playerCharacterImage.setImageResource(character.getImageResId());
+                    return;
+                }
+            }
+        }
+        playerCharacterImage.setImageResource(R.drawable.main_character);
     }
 
     // ------------------------------------------------------------------------
@@ -328,6 +429,7 @@ public class BattleEcoActivity extends AppCompatActivity {
                     rollHandler.postDelayed(this, rollInterval);
                 } else {
                     boolean playerStarts = new Random().nextBoolean();
+                    isPlayerTurn = playerStarts;
                     battleLogText.setText(playerStarts ? "Final result: Player goes first!" : "Final result: AI goes first!");
                     handler.postDelayed(playerStarts ? () -> startPlayerTurn() : () -> processComputerTurn(), 1000);
                 }
@@ -370,6 +472,14 @@ public class BattleEcoActivity extends AppCompatActivity {
                 int minutes = secondsRemaining / 60;
                 int seconds = secondsRemaining % 60;
                 timerText.setText(String.format("⏰ %02d:%02d", minutes, seconds));
+
+                // Determine how many minutes have passed (0-based)
+                int minuteIndex = (int) ((TOTAL_GAME_TIME - timeRemaining) / 60000);
+                if (minuteIndex > nextEcoTipIndex && nextEcoTipIndex < ecoTipTexts.length) {
+                    showEcoTipDialogueUnskippable(ecoTipTexts[nextEcoTipIndex], ecoTipDurations[nextEcoTipIndex],
+                            ecoTipSoundRes[nextEcoTipIndex]);
+                    nextEcoTipIndex++;
+                }
             }
             @Override
             public void onFinish() {
@@ -395,6 +505,17 @@ public class BattleEcoActivity extends AppCompatActivity {
         editor.putInt("computerEnergy", computerEnergy);
         editor.putInt("currentBossIndex", currentBossIndex);
         editor.putLong("timeRemaining", timeRemaining);
+        editor.putBoolean("isPlayerTurn", isPlayerTurn);
+        if(playerHand != null && !playerHand.isEmpty()){
+            Gson gson = new Gson();
+            String playerHandJson = gson.toJson(playerHand);
+            editor.putString("playerHand", playerHandJson);
+        } else {
+            editor.remove("playerHand");
+        }
+        editor.putString("battleLog", battleLogText.getText().toString());
+        editor.putInt("lastPlayerCardResId", lastPlayerCardResId);
+        editor.putInt("lastAICardResId", lastAICardResId);
         editor.apply();
     }
 
@@ -412,7 +533,19 @@ public class BattleEcoActivity extends AppCompatActivity {
                 playerEnergy = prefs.getInt("playerEnergy", 3);
                 computerEnergy = prefs.getInt("computerEnergy", 3);
                 currentBossIndex = prefs.getInt("currentBossIndex", 0);
-                timeRemaining = prefs.getLong("timeRemaining", 600000);
+                timeRemaining = prefs.getLong("timeRemaining", 300000);
+                isPlayerTurn = prefs.getBoolean("isPlayerTurn", false);
+
+                String playerHandJson = prefs.getString("playerHand", null);
+                if(playerHandJson != null){
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<BattleCard>>(){}.getType();
+                    playerHand = gson.fromJson(playerHandJson, type);
+                }
+                String savedBattleLog = prefs.getString("battleLog", "");
+                battleLogText.setText(savedBattleLog);
+                lastPlayerCardResId = prefs.getInt("lastPlayerCardResId", -1);
+                lastAICardResId = prefs.getInt("lastAICardResId", -1);
             }
         } else {
             resetGameState();
@@ -427,7 +560,15 @@ public class BattleEcoActivity extends AppCompatActivity {
         computerShield = 0;
         playerEnergy = 3;
         computerEnergy = 3;
-        timeRemaining = 600000; // 10 minutes
+        timeRemaining = 300000; // 5 minutes
+        lastPlayerCardResId = -1;
+        lastAICardResId = -1;
+        if(handLayout != null){
+            handLayout.removeAllViews();
+        }
+        if(playerHand != null){
+            playerHand.clear();
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -435,17 +576,19 @@ public class BattleEcoActivity extends AppCompatActivity {
     // ------------------------------------------------------------------------
     private void startPlayerTurn() {
         if(!isGameActive()) return;
+        isPlayerTurn = true;
         if(playerEnergy <= 0){
             handLayout.setVisibility(View.GONE);
             skipTurnButton.setVisibility(View.VISIBLE);
         } else {
             skipTurnButton.setVisibility(View.GONE);
-            drawInitialHand();
+            if(playerHand == null || playerHand.isEmpty()){
+                drawInitialHand();
+            }
             showHandSelection();
         }
     }
 
-    // Draw 3 random cards for the player from playerDeck.
     private void drawInitialHand() {
         if(!isGameActive()) return;
         playerHand = new ArrayList<>();
@@ -470,7 +613,7 @@ public class BattleEcoActivity extends AppCompatActivity {
             cardView.setOnClickListener(v -> {
                 if(!isGameActive()) return;
                 battleLogText.setText("");
-                playerHand.remove(card);
+                playerHand.clear();
                 handLayout.removeAllViews();
                 processPlayerTurnWithCard(card);
             });
@@ -481,6 +624,7 @@ public class BattleEcoActivity extends AppCompatActivity {
     private void processPlayerTurnWithCard(BattleCard card) {
         if(!isGameActive()) return;
         animateDeckDraw(null, playerDrawnCard, card.getImageResId(), () -> {
+            lastPlayerCardResId = card.getImageResId();
             applyCardEffect(card, true);
             updateUI();
             afterTurnCheck();
@@ -492,16 +636,17 @@ public class BattleEcoActivity extends AppCompatActivity {
 
     private void processComputerTurn() {
         if(!isGameActive()) return;
+        isPlayerTurn = false;
         if(computerEnergy <= 0){
             battleLogText.setText("AI skipped its turn due to insufficient energy.");
             handler.postDelayed(this::startPlayerTurn, 1000);
             return;
         }
-        // AI draws from aiDeck.
         Random random = new Random();
         BattleCard card = aiDeck.get(random.nextInt(aiDeck.size()));
         battleLogText.setText("");
         animateDeckDraw(null, aiDrawnCard, card.getImageResId(), () -> {
+            lastAICardResId = card.getImageResId();
             applyCardEffect(card, false);
             updateUI();
             afterTurnCheck();
@@ -514,10 +659,6 @@ public class BattleEcoActivity extends AppCompatActivity {
     // ------------------------------------------------------------------------
     // Damage, Card Effects, and Boss Progression
     // ------------------------------------------------------------------------
-    /**
-     * Modified applyDamage returns an array: [damageApplied, damageBlocked].
-     * Only Piercing Staff uses ignoreShield = true.
-     */
     private int[] applyDamage(boolean isPlayerTurn, int damage, boolean ignoreShield) {
         int blocked = 0;
         if(isPlayerTurn){
@@ -563,7 +704,6 @@ public class BattleEcoActivity extends AppCompatActivity {
         }
         String cardName = card.getName().toLowerCase();
 
-        // Card 1: Reforest Revival
         if(cardName.contains("reforest revival")){
             if(isPlayerTurn){
                 int[] result = applyDamage(true, 60, false);
@@ -582,7 +722,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 2: Nature's Embrace
         else if(cardName.contains("nature's embrace")){
             if(isPlayerTurn){
                 playerHealth += 30;
@@ -594,7 +733,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage = "Computer used Nature's Embrace: healed 30 HP and gained 2 Energy.";
             }
         }
-        // Card 3: Piercing Staff (ignores shields)
         else if(cardName.contains("piercing staff")){
             if(isPlayerTurn){
                 int[] result = applyDamage(true, 35, true);
@@ -606,7 +744,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage = "Computer used Piercing Staff: dealt " + result[0] + " damage (ignoring shields) and gained 20 shield.";
             }
         }
-        // Card 4: Forest Aura
         else if(cardName.contains("forest aura")){
             if(isPlayerTurn){
                 playerEnergy += 1;
@@ -616,7 +753,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage = "Computer used Forest Aura: gained 1 Energy.";
             }
         }
-        // Card 5: Green Shield
         else if(cardName.contains("green shield")){
             if(isPlayerTurn){
                 playerShield += 15;
@@ -636,7 +772,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 6: Eco Barrier
         else if(cardName.contains("eco barrier")){
             if(isPlayerTurn){
                 playerShield += 20;
@@ -656,7 +791,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 7: Carbon Guard
         else if(cardName.contains("carbon guard")){
             if(isPlayerTurn){
                 playerShield += 25;
@@ -676,7 +810,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 8: Fossil Fury
         else if(cardName.contains("fossil fury")){
             if(isPlayerTurn){
                 int[] result = applyDamage(true, 25, false);
@@ -694,7 +827,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 9: Pollution Pulse
         else if(cardName.contains("pollution pulse")){
             int reduction = 30;
             int baseDamage = 45;
@@ -724,7 +856,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 10: Emissions Eruption
         else if(cardName.contains("emissions eruption")){
             if(isPlayerTurn){
                 int[] result = applyDamage(true, 35, false);
@@ -742,7 +873,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage += ".";
             }
         }
-        // Card 11: Pollution Moon
         else if(cardName.contains("pollution moon")){
             if(isPlayerTurn){
                 playerShield += 25;
@@ -752,7 +882,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage = "Computer used Pollution Moon: gained 25 shield.";
             }
         }
-        // Default fallback.
         else {
             if(isPlayerTurn){
                 int[] result = applyDamage(true, card.getEffectValue(), false);
@@ -774,8 +903,7 @@ public class BattleEcoActivity extends AppCompatActivity {
     }
 
     /**
-     * Improved energy cost extraction: assumes that the energy cost is indicated by the
-     * last numeric value before the word "Energy" in the card's name.
+     * Extracts the energy cost from the card name.
      */
     private int extractEnergyCost(String cardName) {
         int cost = 0;
@@ -841,65 +969,27 @@ public class BattleEcoActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void gameOver() {
         gameIsOver = true;
         battleLogText.setText("Game Over!");
-
-        // Convert remaining time to minutes and seconds
-        int secondsRemaining = (int) (timeRemaining / 1000);
-        int minutes = secondsRemaining / 60;
-        int seconds = secondsRemaining % 60;
-
-        // Format as MM:SS (e.g., 7:23)
-        String finishTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-
-        // Get the current date (e.g., March 11, 2025)
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(new Date());
-
-        // Retrieve existing records and append the new one
-        SharedPreferences prefs = getSharedPreferences("GameStats", MODE_PRIVATE);
-        String existingRecords = prefs.getString("game_records", "");
-        String newRecord = "Game finished at: " + finishTime + " | Date: " + currentDate + "\n";
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("game_records", existingRecords + newRecord); // Append new record
-        editor.apply();
-
-        // Make sure UI changes are done on the main thread
-        runOnUiThread(() -> {
-            // Show restart and exit buttons, disable game continuation
-            Button restartButton = findViewById(R.id.restartButton);
-            Button exitButton = findViewById(R.id.exitButton);
-
-            restartButton.setVisibility(View.VISIBLE);
-            exitButton.setVisibility(View.VISIBLE);
-
-            restartButton.setOnClickListener(v -> restartGame());
-            exitButton.setOnClickListener(v -> finish());
-        });
     }
-
-
-
-
-
-
-
 
     // ------------------------------------------------------------------------
     // Restart Game
     // ------------------------------------------------------------------------
     private void restartGame() {
-        // Clear preferences and reset in-memory state.
         SharedPreferences prefs = getSharedPreferences("BattleEcoPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.commit();
+        prefs.edit().clear().apply();
         resetGameState();
-        // Restart activity with cleared task stack.
+        // Clear drawn cards and player's hand.
+        lastPlayerCardResId = -1;
+        lastAICardResId = -1;
+        if(handLayout != null){
+            handLayout.removeAllViews();
+        }
+        if(playerHand != null){
+            playerHand.clear();
+        }
         Intent intent = new Intent(this, BattleEcoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -916,10 +1006,6 @@ public class BattleEcoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Animates a card draw.
-     * If deckPreview is null, the card appears to fly from the character image.
-     */
     private void animateDeckDraw(final ImageView deckPreview, final ImageView drawnCard,
                                  final int newImageResId, final Runnable onAnimationEnd) {
         MediaPlayer mp = MediaPlayer.create(BattleEcoActivity.this, R.raw.cardflip);
@@ -978,7 +1064,7 @@ public class BattleEcoActivity extends AppCompatActivity {
     // ------------------------------------------------------------------------
     private void storeVictoryInFirestoreIncrement(int pointsEarned) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> updates = new HashMap<>();
+        HashMap<String, Object> updates = new HashMap<>();
         updates.put("points", FieldValue.increment(pointsEarned));
         updates.put("highScore", FieldValue.increment(pointsEarned));
         db.collection("Games").document("Jonr")
@@ -990,7 +1076,7 @@ public class BattleEcoActivity extends AppCompatActivity {
     }
 
     // ------------------------------------------------------------------------
-    // Helper Dialog Methods
+    // Existing NPC Dialogue Methods
     // ------------------------------------------------------------------------
     private void showNpcDialogue(String message, boolean enableAfterDismiss) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_npc_explanation, null);
@@ -1029,7 +1115,7 @@ public class BattleEcoActivity extends AppCompatActivity {
                 showNpcDialogue("The Pollution Boss emerges! Hurry, the clock is ticking.", true);
                 break;
             case 2:
-                showNpcDialogue("The Sea Trash Boss has arrived! Beat it before the 10 minutes are up.", true);
+                showNpcDialogue("The Volcanic Boss has arrived! Beat it before the 5 minutes are up.", true);
                 break;
             default:
                 break;

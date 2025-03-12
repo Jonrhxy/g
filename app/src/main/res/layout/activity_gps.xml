@@ -12,8 +12,8 @@
     <!-- 1) Curved header image at the top -->
     <ImageView
         android:id="@+id/imageHeader"
-        android:layout_width="419dp"
-        android:layout_height="190dp"
+        android:layout_width="426dp"
+        android:layout_height="189dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/header_image"
