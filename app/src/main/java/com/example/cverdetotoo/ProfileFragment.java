@@ -155,10 +155,11 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        // Selected character & unlocked list
         imageSelectedCharacter = view.findViewById(R.id.imageSelectedCharacter);
         textSelectedCharacterName = view.findViewById(R.id.textSelectedCharacterName);
         recyclerUnlockedChars = view.findViewById(R.id.recyclerUnlockedChars);
+
+
 
         // Load characters from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
