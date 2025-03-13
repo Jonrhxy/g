@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.animation.ObjectAnimator;
 
@@ -49,8 +50,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment.
-        View root = inflater.inflate(R.layout.activity_home, container, false);
-        return root;
+        return inflater.inflate(R.layout.activity_home, container, false);
     }
 
     @Override
@@ -63,10 +63,13 @@ public class HomeFragment extends Fragment {
             activity.getSupportActionBar().hide();
         }
 
-        // Fetch popup data and check deletion schedule.
+        // Fetch the welcome popup data.
         fetchPopupDataAndShow();
+
+        // Check if the account deletion is scheduled and show the prompt if so.
         checkDeletionSchedule();
 
+        // Register the ActivityResultLauncher for PreAssess activities.
         preAssessLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -87,23 +90,33 @@ public class HomeFragment extends Fragment {
         CardView vid4Card = view.findViewById(R.id.vid4);
         vid1Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PreAssess1.class);
                 preAssessLauncher.launch(intent);
             }
         });
         vid2Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PreAssess2.class);
                 preAssessLauncher.launch(intent);
             }
         });
         vid4Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), videoQCU.class);
                 preAssessLauncher.launch(intent);
+            }
+        });
+
+        // Set click listener for More Videos TextView.
+        TextView tvMoreVideos = view.findViewById(R.id.tvMoreVideos);
+        tvMoreVideos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), advid.class);
+                startActivity(intent);
             }
         });
 
@@ -115,28 +128,28 @@ public class HomeFragment extends Fragment {
 
         trivia1Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent triviaIntent = new Intent(getActivity(), StoryActivity11.class);
                 startActivity(triviaIntent);
             }
         });
         trivia2Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent triviaIntent = new Intent(getActivity(), StoryActivity22.class);
                 startActivity(triviaIntent);
             }
         });
         trivia3Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent triviaIntent = new Intent(getActivity(), StoryActivity33.class);
                 startActivity(triviaIntent);
             }
         });
         trivia4Card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent triviaIntent = new Intent(getActivity(), StoryActivity44.class);
                 startActivity(triviaIntent);
             }
@@ -173,6 +186,7 @@ public class HomeFragment extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Use the username as the document ID.
         DocumentReference popupRef = db.collection("popups").document(username);
 
         popupRef.get()
@@ -190,11 +204,15 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching popup data.", e);
-                    Intent intent = new Intent(getActivity(), popupWelcome.class);
-                    startActivity(intent);
-                    popupRef.set(Collections.singletonMap("popup5", true));
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error fetching popup data.", e);
+                        // Fallback: show the popup and update Firestore.
+                        Intent intent = new Intent(getActivity(), popupWelcome.class);
+                        startActivity(intent);
+                        popupRef.set(Collections.singletonMap("popup5", true));
+                    }
                 });
     }
 

@@ -11,26 +11,55 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/cv"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/cv_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CVERDETOTOO"
         tools:targetApi="31">
+        <activity
+            android:name=".PostAssess2After"
+            android:exported="false" />
+        <activity
+            android:name=".PostAsses25"
+            android:exported="false" />
+        <activity
+            android:name=".PostAsses24"
+            android:exported="false" />
+        <activity
+            android:name=".PostAsses23"
+            android:exported="false" />
+        <activity
+            android:name=".PostAsses22"
+            android:exported="false" />
+        <activity
+            android:name=".PostAsses21"
+            android:exported="false" />
+        <activity
+            android:name=".PostAssess2"
+            android:exported="false" />
+
+        <service
+            android:name=".NotificationForegroundService"
+            android:foregroundServiceType="mediaPlayback"
+            android:permission="android.permission.FOREGROUND_SERVICE" />
+
+        <activity
+            android:name=".advid"
+            android:exported="false" />
         <activity
             android:name=".CaptureFootprintstart"
             android:exported="false" />
@@ -43,10 +72,6 @@
         <activity
             android:name=".ActivityLog"
             android:exported="false" /> <!-- Services -->
-        <service
-            android:name=".NotificationForegroundService"
-            android:enabled="true"
-            android:exported="false" />
         <service
             android:name=".TrackingService"
             android:exported="false"
@@ -69,7 +94,6 @@
         <activity
             android:name=".PostAsses12"
             android:exported="false" />
-
         <activity
             android:name=".PostAssess1"
             android:exported="false" />

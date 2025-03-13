@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CVERDETOTOO"
 include(":app")
-include(":sdkk")
+include(":sdk123")

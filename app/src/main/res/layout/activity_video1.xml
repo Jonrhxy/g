@@ -28,16 +28,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
+        android:layout_marginTop="20sp"
         android:layout_gravity="top">
 
         <!-- Add any progress indicators or user info here -->
 
         <ImageButton
             android:id="@+id/close_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@android:drawable/btn_plus"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Close Story" />
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="@color/WRed"
+            android:background="@drawable/backbutton"
+            android:contentDescription="@string/closestory" />/>
     </LinearLayout>
 </FrameLayout>

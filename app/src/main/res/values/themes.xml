@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CVERDETOTOO" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.CVERDETOTOO" parent="Base.Theme.CVERDETOTOO" />
+    <!-- Customize your light theme here. -->
+    <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Update Theme.CVERDETOTOO to inherit from a MaterialComponents theme -->
+    <style name="Theme.CVERDETOTOO" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
 </resources>

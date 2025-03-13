@@ -1,4 +1,3 @@
-
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +8,7 @@
     android:background="@drawable/aboutssbg"
     tools:context=".EditProfile">
 
-    <!-- Top bar (you can style it however you want) -->
+    <!-- Top bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -20,7 +19,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <!-- Back arrow (optional) -->
+        <!-- Back arrow -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
@@ -61,79 +60,72 @@
 
             <!-- First Name -->
             <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <!-- Label Outside EditText -->
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/Firstname"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
-
-                <!-- EditText with Custom Background -->
                 <EditText
                     android:id="@+id/etFirstName"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
-                    android:textColor="@color/BlckYellow"
+                    android:layout_height="50dp"
                     android:padding="12dp"
+                    android:textColor="@color/BlckYellow"
                     android:background="@drawable/edit_text_background"/>
             </LinearLayout>
 
-
             <!-- Last Name -->
             <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/Lastname"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
                 <EditText
                     android:id="@+id/etLastName"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="3dp"
-                    android:textColor="@color/BlckYellow"
                     android:padding="12dp"
+                    android:textColor="@color/BlckYellow"
                     android:background="@drawable/edit_text_background" />
             </LinearLayout>
 
             <!-- Username -->
             <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/Username"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
-
                 <EditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="3dp"
                     android:padding="12dp"
                     android:textColor="@color/BlckYellow"
@@ -142,151 +134,51 @@
 
             <!-- Email -->
             <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/Email"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
+                    android:layout_height="50dp"
                     android:hint="@string/email"
-                    android:textColor="@color/BlckYellow"
                     android:inputType="textEmailAddress"
                     android:layout_marginTop="4dp"
                     android:padding="12dp"
-                    android:background="@drawable/edit_text_background" />
-            </LinearLayout>
-
-            <!-- Birth date -->
-            <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:text="Birth date"
-                    android:textSize="20sp"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp"/>
-                <EditText
-                    android:id="@+id/etBirthDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/birth_date"
                     android:textColor="@color/BlckYellow"
-                    android:inputType="date"
-                    android:layout_marginTop="8dp"
-                    android:padding="12dp"
                     android:background="@drawable/edit_text_background" />
             </LinearLayout>
-            <!-- Gender RadioGroup -->
-            <!-- "Gender" label -->
-            <TextView
-                android:id="@+id/tvGenderLabel"
-                android:layout_width="wrap_content"
+
+            <!-- Reset Password -->
+            <LinearLayout
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
-                android:text="@string/gender"
-                android:layout_gravity="left"
-                android:layout_marginStart="25sp"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginTop="35sp"
-                android:textColor="@android:color/black" />
-
-            <!-- Container with rounded corners background -->
-            <LinearLayout
-                android:id="@+id/layoutGenderContainer"
-                android:layout_width="320sp"
-                android:layout_height="170sp"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_gender_container">
-
-                <RadioGroup
-                    android:id="@+id/rgGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Female -->
-                    <RadioButton
-                        android:id="@+id/rbFemale"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/female"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:padding="10dp" />
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#C5BBA5" />
-
-                    <!-- Male -->
-                    <RadioButton
-                        android:id="@+id/rbMale"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/male"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:padding="8dp" />
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#C5BBA5" />
-
-                    <!-- Others -->
-                    <RadioButton
-                        android:id="@+id/rbOthers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/others"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:padding="8dp" />
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <!-- RESET PASS -->
-            <LinearLayout
-                android:layout_width="320sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginTop="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35sp"
-                    android:fontFamily="@font/poppins_semibold"
                     android:text="@string/ResetPass"
                     android:textSize="20sp"
                     android:textColor="@color/BlckBlue"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
                 <Button
                     android:id="@+id/btnResPass"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:text="@string/ResetPass"
+                    android:text="@string/CResetPass"
                     android:textColor="@color/BlckYellow"
                     android:layout_marginTop="4dp"
                     android:padding="12dp"
@@ -297,7 +189,7 @@
             <TextView
                 android:id="@+id/tvSaveChanges"
                 android:layout_width="wrap_content"
-                android:layout_height="45sp"
+                android:layout_height="45dp"
                 android:layout_marginTop="24dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
@@ -310,8 +202,6 @@
                 android:background="@drawable/btn_save_changes"
                 android:clickable="true"
                 android:focusable="true" />
-
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

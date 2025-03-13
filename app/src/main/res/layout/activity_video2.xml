@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="20sp"
         android:padding="16dp"
         android:layout_gravity="top">
 
@@ -35,10 +36,10 @@
 
         <ImageButton
             android:id="@+id/close_button2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@android:drawable/btn_plus"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:backgroundTint="@color/WRed"
+            android:background="@drawable/backbutton"
             android:contentDescription="@string/closestory" />
     </LinearLayout>
 </FrameLayout>

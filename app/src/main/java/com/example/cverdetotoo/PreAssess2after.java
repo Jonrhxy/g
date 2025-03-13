@@ -73,7 +73,7 @@ public class PreAssess2after extends AppCompatActivity {
             scoreData.put("timestamp", System.currentTimeMillis());
             scoreData.put("username", username);
 
-            db.collection("PreAssess")
+            db.collection("PreAssess2")
                     .document(username)
                     .set(scoreData)
                     .addOnSuccessListener(aVoid ->

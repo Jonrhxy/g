@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@drawable/btnbg23">
 
         <!-- Header title (e.g., "Date: 20250308") or could be empty for detail cards -->
         <TextView
@@ -20,9 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Header Title"
+            android:fontFamily="@font/poppins_semibold"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/WBlue" />
 
         <!-- Content (e.g., record details) -->
         <TextView
@@ -30,8 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Card Content"
+            android:fontFamily="@font/poppins_italic"
             android:textSize="16sp"
-            android:textColor="@android:color/white"
+            android:textColor="@color/WBlue"
             android:layout_marginTop="4dp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

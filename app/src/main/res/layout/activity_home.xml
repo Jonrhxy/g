@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/homeblue">
+        android:background="@drawable/btnbg23">
 
         <!-- Top container (red banner) -->
         <FrameLayout
@@ -26,7 +26,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/home"
-                android:textColor="@android:color/white"
+                android:textColor="@color/WRed"
                 android:textSize="30sp"
                 android:fontFamily="@font/poppins_bold"/>
 
@@ -54,18 +54,44 @@
                 android:adjustViewBounds="true"/>
         </FrameLayout>
 
+
         <!-- Videos Section -->
-        <TextView
-            android:id="@+id/tvVideos"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:id="@+id/VidM"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/vid"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#FFF3F6" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvVideos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/vid"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#FFF3F6" />
+
+            <TextView
+                android:id="@+id/tvMoreVideos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="170sp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/poppins_italic"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/seemore"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#FFF3F6" />
+        </LinearLayout>
+
 
         <!-- Horizontal ScrollView for video items -->
         <HorizontalScrollView

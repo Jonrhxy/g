@@ -7,11 +7,10 @@
         android:bottomLeftRadius="30dp"
         android:bottomRightRadius="30dp" />
 
-    <stroke android:color="#FFE6E6" android:width="1dp"/>
-    <!-- Example gradient going from a darker red to lighter red. -->
+    <!-- Gradient now flows from left to right -->
     <gradient
-        android:startColor="#9B1B1B"
-        android:centerColor="#AD2323"
-        android:endColor="#CE2E2E"
-        android:angle="90"/>
+        android:startColor="#BF3100"
+        android:centerColor="#6A1901"
+        android:endColor="#150101"
+        android:angle="0"/>
 </shape>

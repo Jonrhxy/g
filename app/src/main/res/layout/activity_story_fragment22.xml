@@ -11,14 +11,38 @@
         android:scaleType="centerCrop"
         android:src="@drawable/trivia21"/>
 
-    <ProgressBar
-        android:id="@+id/storyProgress22"
-        style="?android:attr/progressBarStyleHorizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:progress="0"
-        android:max="100"
-        android:progressTint="@color/WBlue"/>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+            <!-- Character or mascot image aligned to the right -->
+            <ImageView
+                android:id="@+id/trvipic11"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/trivia2logo"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="@string/effectcarbon"
+                android:textColor="@color/gamebg"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

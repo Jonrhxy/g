@@ -42,6 +42,7 @@
     <color name="WRed">#FFE9E9</color>
     <color name="BlckBlue">#0C0330</color>
     <color name="light_blue">#2196F3</color>
-    <color name="BlckRed">#2C0000</color><!-- Lighter shade of blue -->
+    <color name="BlckRed">#2C0000</color>
+    <color name="medjWh">#EEECFF</color>
 
 </resources>

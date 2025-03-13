@@ -1,6 +1,6 @@
 <resources>
     <!-- GET GTART TO LOGIN -->
-    <string name="app_name">CVerde</string>
+    <string name="app_name">C-Verde</string>
     <string name="getstartbtn">\n</string>
     <string name="Email_Uname">Email/Username</string>
     <string name="getstart">Click anywhere to start!</string>
@@ -199,6 +199,43 @@
     <string name="batteco">Battle Eco</string>
     <string name="chall1">Go Green With Every Steps</string>
     <string name="chall2">Capture your Carbon FootPrint</string>
+    <string name="CResetPass">Click to Reset your Password</string>
+
+
+    <string name="date">March 13, 2025</string>
+    <string name="achieve1">• You earned Eco Rookie badge</string>
+    <string name="achieve2">• You earned Eco Leader badge for tracking your travel</string>
+    <string name="achiev3">• Equipped Wind Mage</string>
+    <string name="achiev5">• You earned Eco Rookie badge</string>
+    <string name="character1">Green Warrior</string>
+    <string name="charmess">Swipe to select from unlocked characters</string>
+    <string name="selectChar">Select Character</string>
+    <string name="nopts">0 points</string>
+    <string name="norank">No Rank</string>
+    <string name="playerdef">Player Name</string>
+    <string name="ecoM">Eco Master</string>
+    <string name="EcoH">Eco Hero</string>
+    <string name="second">Ria</string>
+    <string name="first">Rae</string>
+    <string name="third">Aly</string>
+    <string name="leaderboard">LEADERBOARD</string>
+    <string name="pic">\n</string>
+    <string name="rank3">3</string>
+    <string name="rank1">1</string>
+    <string name="rank2">2</string>
+    <string name="badge">BADGES</string>
+    <string name="totalC">Total Coins</string>
+    <string name="totalP">Total Points:</string>
+    <string name="seemore"><u>See More</u></string>
+    <string name="exit">Exit</string>
+    <string name="backb">Back</string>
+    <string name="cverde">C-Verde Title</string>
+    <string name="sampledesc">Sample Description only!</string>
+    <string name="ytLink"><u>https://www.youtube.com/watch?v=wsJ2LJ9TtFI</u></string>
+    <string name="ActLog1">Access your <u>activity log</u> using the button above.</string>
+    <string name="Act1">You earned Eco Rookie badge.</string>
+    <string name="time">5:49 PM</string>
+    <string name="today">TODAY</string>
 
 
 </resources>

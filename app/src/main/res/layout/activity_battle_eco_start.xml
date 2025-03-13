@@ -28,7 +28,7 @@
         android:layout_height="80dp"
         android:layout_marginTop="132dp"
         android:contentDescription="Walk icon"
-        android:src="@drawable/cardicon"
+        android:src="@drawable/walk_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"

@@ -18,7 +18,7 @@
         app:navigationIcon="@drawable/arrow_back"
         app:navigationIconTint="@android:color/white"
         app:title="Activity Log"
-        app:titleTextColor="@android:color/white"
+        app:titleTextColor="@color/WRed"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -61,8 +61,9 @@
                         android:id="@+id/tvToday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TODAY"
-                        android:textColor="@android:color/white"
+                        android:text="@string/today"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textColor="@color/WBlue"
                         android:textSize="40sp"
                         android:textStyle="bold" />
 
@@ -76,8 +77,9 @@
                         android:id="@+id/tvDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="March 03"
-                        android:textColor="@android:color/white"
+                        android:text="@string/date"
+                        android:textColor="@color/WBlue"
+                        android:fontFamily="@font/poppins_semibold"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
@@ -103,18 +105,19 @@
                             android:id="@+id/tvTime1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10:32 AM"
-                            android:textColor="@android:color/white"
+                            android:text="@string/time"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold"/>
 
                         <TextView
                             android:id="@+id/tvActivity1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="User log in."
-                            android:textColor="@android:color/white"
+                            android:text="@string/Act1"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -131,18 +134,19 @@
                             android:id="@+id/tvTime2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="11:45 AM"
-                            android:textColor="@android:color/white"
+                            android:text="@string/time"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold"/>
 
                         <TextView
                             android:id="@+id/tvActivity2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="You earned Eco Rookie badge."
-                            android:textColor="@android:color/white"
+                            android:text="@string/Act1"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -159,18 +163,19 @@
                             android:id="@+id/tvTime3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1:20 PM"
-                            android:textColor="@android:color/white"
+                            android:text="@string/time"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/poppins_semibold"/>
 
                         <TextView
                             android:id="@+id/tvActivity3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="You earned Eco Rookie badge."
-                            android:textColor="@android:color/white"
+                            android:text="@string/Act1"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -187,18 +192,19 @@
                             android:id="@+id/tvTime4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5:49 PM"
-                            android:textColor="@android:color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:text="@string/time"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textColor="@color/BlckBlue"
+                            android:textSize="18sp"/>
 
                         <TextView
                             android:id="@+id/tvActivity4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="You earned Eco Rookie badge."
-                            android:textColor="@android:color/white"
+                            android:text="@string/Act1"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColor="@color/BlckBlue"
                             android:textSize="16sp" />
                     </LinearLayout>
 

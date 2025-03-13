@@ -91,7 +91,8 @@ dependencies {
 
     // Guava dependency for ListenableFuture
     implementation("com.google.guava:guava:31.1-android")
-    implementation(project(":sdkk"))
+    implementation(project(":sdk123"))
+    implementation(project(":sdk123"))
 
     // Testing dependencies
     testImplementation(libs.junit)
@@ -104,5 +105,4 @@ dependencies {
     implementation ("com.airbnb.android:lottie:5.2.0")
 
     // Use the local OpenCV SDK module (imported as :sdk)
-    implementation(project(":sdkk"))
 }

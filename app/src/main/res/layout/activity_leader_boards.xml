@@ -19,28 +19,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-
-            <ImageView
-                android:id="@+id/ivBackArrow"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="23dp"
-                android:contentDescription="Back"
-                android:src="@drawable/arrow_back"
-                app:tint="@android:color/white" />
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15sp">
 
             <TextView
                 android:id="@+id/tvLeaderboardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="LEADERBOARD"
+                android:text="@string/leaderboard"
                 android:textSize="30sp"
                 android:fontFamily="@font/poppins_bold"
                 android:textStyle="bold"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/WRed" />
 
         </RelativeLayout>
 
@@ -59,11 +50,10 @@
             <!-- Top 3 container (2nd, 1st, 3rd) -->
             <LinearLayout
                 android:id="@+id/top3Container"
-                android:layout_width="311dp"
+                android:layout_width="311sp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="30sp"
+                android:layout_marginStart="1sp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -71,7 +61,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -82,10 +72,10 @@
 
                         <ImageView
                             android:id="@+id/ivSecondPlace"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:scaleType="fitCenter"
-                            android:contentDescription="Second Place"
+                            android:contentDescription="@string/pic"
                             android:background="@drawable/second_place_bg"
                             android:src="@drawable/muser" />
                     </FrameLayout>
@@ -98,18 +88,21 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:background="@drawable/rank_shield_bg"
-                        android:text="2"
+                        android:text="@string/rank2"
                         android:textColor="#FFFF0000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvSecondPlaceName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="Gelik"
-                        android:textColor="@android:color/black"
+                        android:lines="1"
+                        android:text="@string/second"
+                        android:textColor="@color/WBlue"
+                        android:fontFamily="@font/poppins_semibold"
                         android:textSize="14sp" />
 
                     <TextView
@@ -117,8 +110,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1010 points"
-                        android:textColor="@android:color/darker_gray"
+                        android:text="@string/nopts"
+                        android:fontFamily="@font/figtreemed"
+                        android:textColor="@color/main"
                         android:textSize="12sp" />
 
                     <TextView
@@ -126,8 +120,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Eco Hero"
-                        android:textColor="@android:color/holo_green_dark"
+                        android:fontFamily="@font/poppins_semibold_italic"
+                        android:textColor="@color/quizgreen"
+                        android:text="@string/EcoH"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -162,18 +157,21 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:background="@drawable/rank_shield_bg"
-                        android:text="1"
+                        android:text="@string/rank1"
                         android:textColor="#FFFF0000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvFirstPlaceName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="Rae"
-                        android:textColor="@android:color/black"
+                        android:lines="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/first"
+                        android:textColor="@color/WBlue"
                         android:textSize="14sp" />
 
                     <TextView
@@ -181,8 +179,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1290 points"
-                        android:textColor="@android:color/darker_gray"
+                        android:text="@string/nopts"
+                        android:fontFamily="@font/figtreemed"
+                        android:textColor="@color/main"
                         android:textSize="12sp" />
 
                     <TextView
@@ -190,8 +189,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Eco Master"
-                        android:textColor="@android:color/holo_green_dark"
+                        android:text="@string/ecoM"
+                        android:fontFamily="@font/poppins_semibold_italic"
+                        android:textColor="@color/quizgreen"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -199,7 +199,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -209,10 +208,11 @@
 
                         <ImageView
                             android:id="@+id/ivThirdPlace"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
                             android:background="@drawable/second_place_bg"
-                            android:contentDescription="Third Place"
+                            android:contentDescription="@string/pic"
                             android:src="@drawable/muser" />
                     </FrameLayout>
                     <TextView
@@ -224,18 +224,21 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:background="@drawable/rank_shield_bg"
-                        android:text="3"
+                        android:text="@string/rank3"
                         android:textColor="#FFFF0000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvThirdPlaceName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="Necca"
-                        android:textColor="@android:color/black"
+                        android:lines="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/third"
+                        android:textColor="@color/WBlue"
                         android:textSize="14sp" />
 
                     <TextView
@@ -243,8 +246,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1000 points"
-                        android:textColor="@android:color/darker_gray"
+                        android:lines="1"
+                        android:text="@string/nopts"
+                        android:fontFamily="@font/figtreemed"
+                        android:textColor="@color/main"
                         android:textSize="12sp" />
 
                     <TextView
@@ -253,7 +258,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Eco Hero"
-                        android:textColor="@android:color/holo_green_dark"
+                        android:fontFamily="@font/poppins_semibold_italic"
+                        android:textColor="@color/quizgreen"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -311,6 +317,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvFourthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Eco Leader"
@@ -336,7 +343,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:padding="12dp"
-                    android:background="@drawable/bg_rank_5">
+                    android:background="@drawable/bg_rank_6">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -361,6 +368,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvFifthPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Player Name"
@@ -368,6 +376,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvFifthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Eco Leader"
@@ -376,6 +385,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvFifthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="853 points"
@@ -391,7 +401,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:padding="12dp"
-                    android:background="@drawable/bg_rank_6">
+                    android:background="@drawable/bg_rank_7">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -416,24 +426,27 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvSixthPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Player Name"
+                            android:text="@string/playerdef"
                             android:textColor="@android:color/white"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvSixthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eco Leader"
+                            android:text="@string/norank"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvSixthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="853 points"
+                        android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
@@ -471,28 +484,32 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvSeventhPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Player Name"
+                            android:text="@string/playerdef"
                             android:textColor="@android:color/white"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvSeventhPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eco Leader"
+                            android:text="@string/norank"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvSeventhPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="853 points"
+                        android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
+
                 <!-- Rank 8 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -526,24 +543,27 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvEighthPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Player Name"
+                            android:text="@string/playerdef"
                             android:textColor="@android:color/white"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvEighthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eco Leader"
+                            android:text="@string/norank"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvEighthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="853 points"
+                        android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
@@ -581,24 +601,27 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvNinthPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Player Name"
+                            android:text="@string/playerdef"
                             android:textColor="@android:color/white"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvNinthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eco Leader"
+                            android:text="@string/norank"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvNinthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="853 points"
+                        android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
@@ -636,151 +659,31 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvTenthPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Player Name"
+                            android:text="@string/playerdef"
                             android:textColor="@android:color/white"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tvTenthPlaceRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eco Leader"
+                            android:text="@string/norank"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvTenthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="853 points"
+                        android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
-                <!-- Example for "You" at the bottom -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <!-- Other views can go here -->
-
-                    <LinearLayout
-                        android:layout_width="270dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="10sp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="26dp"
-                        android:padding="3dp"
-                        android:background="@drawable/bg_your_rank">
-
-                        <!-- 1st column: Avatar + "You" -->
-                        <LinearLayout
-                            android:id="@+id/rvLeaderboard"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/muser"
-                                android:contentDescription="Your Avatar" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="You"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="4dp"/>
-                        </LinearLayout>
-
-                        <!-- 2nd column: Points + 150 -->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Points"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="150"
-                                android:textSize="16sp"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-
-                        <!-- 3rd column: Level + 50 -->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Level"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="50"
-                                android:textSize="16sp"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-
-                        <!-- 4th column: Rank + Eco Rookie -->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Rank"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Eco Rookie"
-                                android:textSize="13sp"
-                                android:textColor="@android:color/white" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </RelativeLayout>
-
-
             </LinearLayout>
 
         </LinearLayout>
