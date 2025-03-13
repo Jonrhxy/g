@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Background Image -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/vid1bg" />
+
+    <LinearLayout
+        android:id="@+id/afterpre1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="51dp"
+        android:background="@drawable/textbgwhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="212dp"
+            android:layout_height="212dp"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/final_logo" />
+
+        <!-- Well Done -->
+        <TextView
+            android:id="@+id/wtg"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/poppinsregular"
+            android:gravity="center"
+            android:text="@string/WD"
+            android:textColor="#000000"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <!-- Total Carbon Text -->
+        <TextView
+            android:id="@+id/totalcarb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="@string/pre1scoress"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Total Carbon Value -->
+        <TextView
+            android:id="@+id/post2score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:text="@string/pre1score"
+            android:textColor="#4CAF50"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Additional Note -->
+
+        <TextView
+            android:id="@+id/wtgm1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="51sp"
+            android:fontFamily="@font/afacad"
+            android:gravity="center"
+            android:text="@string/prenote"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/post2done"
+        android:layout_width="231dp"
+        android:layout_height="59dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="84dp"
+        android:layout_marginBottom="135dp"
+        android:background="@drawable/preassesbtn"
+        android:fontFamily="@font/afacad"
+        android:text="@string/next"
+        android:textColor="@color/YGreen"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/afterpre1" />
+
+</RelativeLayout>
