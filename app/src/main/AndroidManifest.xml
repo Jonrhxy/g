@@ -26,7 +26,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/cv"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/cv_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CVERDETOTOO"
         tools:targetApi="31">

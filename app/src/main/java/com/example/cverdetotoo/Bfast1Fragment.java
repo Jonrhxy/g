@@ -79,7 +79,7 @@ public class Bfast1Fragment extends AppCompatActivity {
     private static final int MODEL_PIXEL_SIZE = 3;    // RGB
     private static final int BYTES_PER_CHANNEL = 4;   // float32
     // Number of classes in your model
-    private static final int MODEL_OUTPUT_CLASSES = 55;
+    private static final int MODEL_OUTPUT_CLASSES = 56;
 
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> galleryLauncher;
@@ -311,6 +311,190 @@ public class Bfast1Fragment extends AppCompatActivity {
             case "meat":
                 resultText = "Meat detected!\nCarbon Emission: 3.5 kg CO₂-e per serving";
                 pointsAwarded = 1;
+                break;
+            case "utensils":
+                resultText = "Utensils detected!\n(No carbon emission data available)";
+                pointsAwarded = 0;
+                break;
+            case "bottle":
+                resultText = "Bottle detected!\nCarbon Emission: 0.15 kg CO₂-e per unit (recycling recommended)";
+                pointsAwarded = 5;
+                break;
+            case "roasted chicken":
+                resultText = "Roasted Chicken detected!\nCarbon Emission: 2.0 kg CO₂-e per serving";
+                pointsAwarded = 4;
+                break;
+            case "burger":
+                resultText = "Burger detected!\nCarbon Emission: 2.5 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "noodle dishes":
+                resultText = "Noodle Dishes detected!\nCarbon Emission: 0.9 kg CO₂-e per serving";
+                pointsAwarded = 6;
+                break;
+            case "peach":
+                resultText = "Peach detected!\nCarbon Emission: 0.35 kg CO₂-e per serving";
+                pointsAwarded = 13;
+                break;
+            case "french fries":
+                resultText = "French Fries detected!\nCarbon Emission: 1.5 kg CO₂-e per serving";
+                pointsAwarded = 4;
+                break;
+            case "roasted pig":
+                resultText = "Roasted Pig detected!\nCarbon Emission: 4.0 kg CO₂-e per serving";
+                pointsAwarded = 1;
+                break;
+            case "adobong manok":
+                resultText = "Adobong Manok detected!\nCarbon Emission: 1.2 kg CO₂-e per serving";
+                pointsAwarded = 8;
+                break;
+            case "adobong baboy":
+                resultText = "Adobong Baboy detected!\nCarbon Emission: 2.8 kg CO₂-e per serving";
+                pointsAwarded = 2;
+                break;
+            case "beef kaldereta":
+                resultText = "Beef Kaldereta detected!\nCarbon Emission: 3.8 kg CO₂-e per serving";
+                pointsAwarded = 1;
+                break;
+            case "pork menudo":
+                resultText = "Pork Menudo detected!\nCarbon Emission: 2.9 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "bicol express":
+                resultText = "Bicol Express detected!\nCarbon Emission: 2.5 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "chicken curry":
+                resultText = "Chicken Curry detected!\nCarbon Emission: 2.1 kg CO₂-e per serving";
+                pointsAwarded = 5;
+                break;
+            case "kare kare":
+                resultText = "Kare Kare detected!\nCarbon Emission: 2.2 kg CO₂-e per serving";
+                pointsAwarded = 4;
+                break;
+            case "adobong sitaw with pork":
+                resultText = "Adobong Sitaw with Pork detected!\nCarbon Emission: 2.7 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "adobong sitaw with chicken":
+                resultText = "Adobong Sitaw with Chicken detected!\nCarbon Emission: 2.0 kg CO₂-e per serving";
+                pointsAwarded = 5;
+                break;
+            case "pineapple":
+                resultText = "Pineapple detected!\nCarbon Emission: 0.45 kg CO₂-e per serving";
+                pointsAwarded = 10;
+                break;
+            case "bread":
+                resultText = "Bread detected!\nCarbon Emission: 0.5 kg CO₂-e per serving";
+                pointsAwarded = 10;
+                break;
+            case "dairy milk":
+                resultText = "Dairy Milk detected!\nCarbon Emission: 1.0 kg CO₂-e per serving";
+                pointsAwarded = 6;
+                break;
+            case "beer":
+                resultText = "Beer detected!\nCarbon Emission: 0.7 kg CO₂-e per serving";
+                pointsAwarded = 5;
+                break;
+            case "deep-fried hard-boiled eggs":
+                resultText = "Deep-Fried Hard-Boiled Eggs detected!\nCarbon Emission: 1.3 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "siomai":
+                resultText = "Siomai detected!\nCarbon Emission: 0.8 kg CO₂-e per serving";
+                pointsAwarded = 7;
+                break;
+            case "fishball":
+                resultText = "Fishball detected!\nCarbon Emission: 0.9 kg CO₂-e per serving";
+                pointsAwarded = 6;
+                break;
+            case "kikiam":
+                resultText = "Kikiam detected!\nCarbon Emission: 0.95 kg CO₂-e per serving";
+                pointsAwarded = 6;
+                break;
+            case "cold beverages":
+                resultText = "Cold Beverages detected!\nCarbon Emission: 0.3 kg CO₂-e per serving";
+                pointsAwarded = 10;
+                break;
+            case "calamares":
+                resultText = "Calamares detected!\nCarbon Emission: 1.7 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "hand":
+                resultText = "Hand detected!\n(No carbon emission data available)";
+                pointsAwarded = 0;
+                break;
+            case "human face":
+                resultText = "Human Face detected!\n(No carbon emission data available)";
+                pointsAwarded = 0;
+                break;
+            case "shawarma":
+                resultText = "Shawarma detected!\nCarbon Emission: 2.0 kg CO₂-e per serving";
+                pointsAwarded = 4;
+                break;
+            case "pastil":
+                resultText = "Pastil detected!\nCarbon Emission: 1.0 kg CO₂-e per serving";
+                pointsAwarded = 7;
+                break;
+            case "egg":
+                resultText = "Egg detected!\nCarbon Emission: 0.6 kg CO₂-e per serving";
+                pointsAwarded = 10;
+                break;
+            case "donut":
+                resultText = "Donut detected!\nCarbon Emission: 0.85 kg CO₂-e per serving";
+                pointsAwarded = 5;
+                break;
+            case "pinakbet":
+                resultText = "Pinakbet detected!\nCarbon Emission: 0.3 kg CO₂-e per serving";
+                pointsAwarded = 12;
+                break;
+            case "sinigang na isda":
+                resultText = "Sinigang na Isda detected!\nCarbon Emission: 1.2 kg CO₂-e per serving";
+                pointsAwarded = 8;
+                break;
+            case "taho":
+                resultText = "Taho detected!\nCarbon Emission: 0.2 kg CO₂-e per serving";
+                pointsAwarded = 15;
+                break;
+            case "burger steak":
+                resultText = "Burger Steak detected!\nCarbon Emission: 2.3 kg CO₂-e per serving";
+                pointsAwarded = 4;
+                break;
+            case "tofu":
+                resultText = "Tofu detected!\nCarbon Emission: 0.2 kg CO₂-e per serving";
+                pointsAwarded = 15;
+                break;
+            case "shrimp":
+                resultText = "Shrimp detected!\nCarbon Emission: 1.0 kg CO₂-e per serving";
+                pointsAwarded = 7;
+                break;
+            case "hotdog":
+                resultText = "Hotdog detected!\nCarbon Emission: 1.8 kg CO₂-e per serving";
+                pointsAwarded = 3;
+                break;
+            case "peanut":
+                resultText = "Peanut detected!\nCarbon Emission: 0.1 kg CO₂-e per serving";
+                pointsAwarded = 18;
+                break;
+            case "almonds":
+                resultText = "Almonds detected!\nCarbon Emission: 0.25 kg CO₂-e per serving";
+                pointsAwarded = 14;
+                break;
+            case "tomato":
+                resultText = "Tomato detected!\nCarbon Emission: 0.2 kg CO₂-e per serving";
+                pointsAwarded = 15;
+                break;
+            case "oatmeal":
+                resultText = "Oatmeal detected!\nCarbon Emission: 0.35 kg CO₂-e per serving";
+                pointsAwarded = 12;
+                break;
+            case "corn":
+                resultText = "Corn detected!\nCarbon Emission: 0.5 kg CO₂-e per serving";
+                pointsAwarded = 10;
+                break;
+            case "cake":
+                resultText = "Cake detected!\nCarbon Emission: 2.13 kg CO₂-e per serving";
+                pointsAwarded = 3;
                 break;
             default:
                 resultText = "Prediction: " + predictedLabel + "\n(No custom match found.)";

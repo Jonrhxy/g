@@ -9,8 +9,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -302,7 +305,7 @@ public class BattleEcoActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if(isGameActive()){
-                    showNpcDialogue("Time's up! Game Over!", false);
+                    showNpcDialogue("Time's up! Game Over!", (Runnable) null);
                     gameOver();
                 }
             }
@@ -354,36 +357,47 @@ public class BattleEcoActivity extends AppCompatActivity {
     // -------------------------------
     // Updated Dialogue Methods with Callbacks
     // -------------------------------
-    // Updated showNpcDialogue accepting a callback.
+
     private void showNpcDialogue(String message, Runnable afterDismiss) {
+
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_npc_explanation, null);
         TextView npcMessage = dialogView.findViewById(R.id.npcMessage);
         TextView npcCloseButton = dialogView.findViewById(R.id.npcCloseButton);
+
+        // Make the dialogue text smaller (adjust the value as needed)
+        npcMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.TransparentFullScreenDialog);
         builder.setView(dialogView);
         final AlertDialog npcDialog = builder.create();
         npcDialog.setCanceledOnTouchOutside(false);
+
         npcDialog.setOnShowListener(dialogInterface -> {
-            if(npcDialog.getWindow() != null){
-                npcDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT);
+            Window window = npcDialog.getWindow();
+            if (window != null) {
+                // Set the layout size to wrap the content (or you can specify a custom width/height)
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                // Position the dialog in the bottom-right corner
+                window.setGravity(Gravity.BOTTOM | Gravity.END);
+                WindowManager.LayoutParams params = window.getAttributes();
+                // Adjust offsets (in pixels) if needed
+                params.x = 20; // distance from the right edge
+                params.y = 20; // distance from the bottom edge
+                window.setAttributes(params);
             }
         });
+
         animateText(npcMessage, message, 0);
+
         npcCloseButton.setOnClickListener(v -> {
             npcDialog.dismiss();
-            if (afterDismiss != null && isGameActive()){
+            if (afterDismiss != null && isGameActive()) {
                 afterDismiss.run();
             }
         });
         npcDialog.show();
     }
 
-    // Overloaded version for backwards compatibility.
-    private void showNpcDialogue(String message, boolean enableAfterDismiss) {
-        Runnable afterDismiss = enableAfterDismiss ? () -> startPlayerTurn() : null;
-        showNpcDialogue(message, afterDismiss);
-    }
 
     // Updated showBossIntroDialogue with callback.
     private void showBossIntroDialogue(int bossIndex, Runnable afterDismiss) {
@@ -460,7 +474,7 @@ public class BattleEcoActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if(isGameActive()){
-                    showNpcDialogue("Time's up! Game Over!", false);
+                    showNpcDialogue("Time's up! Game Over!", (Runnable) null);
                     gameOver();
                 }
             }
@@ -472,20 +486,36 @@ public class BattleEcoActivity extends AppCompatActivity {
         TextView npcMessage = dialogView.findViewById(R.id.npcMessage);
         TextView npcCloseButton = dialogView.findViewById(R.id.npcCloseButton);
         npcCloseButton.setVisibility(View.GONE); // Hide close button.
+
+        // Set a smaller text size (adjust the value as needed)
+        npcMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.TransparentFullScreenDialog);
         builder.setView(dialogView);
         final AlertDialog ecoDialog = builder.create();
         ecoDialog.setCanceledOnTouchOutside(false);
         ecoDialog.setCancelable(false);
-        if(ecoDialog.getWindow() != null){
+
+        if (ecoDialog.getWindow() != null) {
+            // Set the layout to wrap content
             ecoDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT);
+            // Position the dialog at the bottom-right corner
+            ecoDialog.getWindow().setGravity(Gravity.BOTTOM | Gravity.END);
+            WindowManager.LayoutParams params = ecoDialog.getWindow().getAttributes();
+            // Adjust offsets if necessary
+            params.x = 20; // distance from the right edge
+            params.y = 20; // distance from the bottom edge
+            ecoDialog.getWindow().setAttributes(params);
         }
+
         animateText(npcMessage, ecoTip, 0);
         ecoDialog.show();
+
         MediaPlayer ecoTipSoundPlayer = MediaPlayer.create(BattleEcoActivity.this, soundResId);
         ecoTipSoundPlayer.start();
         ecoTipSoundPlayer.setOnCompletionListener(mp -> mp.release());
+
         new Handler().postDelayed(() -> ecoDialog.dismiss(), durationMs);
     }
 
@@ -854,7 +884,7 @@ public class BattleEcoActivity extends AppCompatActivity {
 
     private void afterTurnCheck() {
         if(playerHealth <= 0){
-            showNpcDialogue("Player is defeated!", false);
+            showNpcDialogue("Time's up! Game Over!", (Runnable) null);
             gameOver();
         } else if(computerHealth <= 0){
             proceedToNextBossOrWin();
@@ -1205,5 +1235,4 @@ public class BattleEcoActivity extends AppCompatActivity {
             resetGameState();
         }
     }
-
 }

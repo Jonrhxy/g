@@ -91,8 +91,7 @@ dependencies {
 
     // Guava dependency for ListenableFuture
     implementation("com.google.guava:guava:31.1-android")
-    implementation(project(":sdk123"))
-    implementation(project(":sdk123"))
+    implementation(project(":sdk"))
 
     // Testing dependencies
     testImplementation(libs.junit)

@@ -38,7 +38,7 @@
             android:layout_width="60sp"
             android:layout_height="60sp"
             android:backgroundTint="@color/WRed"
-            android:background="@drawable/backbutton"
+            android:background="@drawable/arrow_back"
             android:contentDescription="@string/closestory" />/>
     </LinearLayout>
 </FrameLayout>

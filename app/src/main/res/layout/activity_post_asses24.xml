@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/postassbg"
+    android:padding="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".YourActivityName">
+
+        <!-- Header with ImageView and TextView -->
+        <LinearLayout
+            android:id="@+id/foodLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/timee"
+                app:srcCompat="@drawable/timer"/>
+
+            <TextView
+                android:id="@+id/posttimer24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/afacadbolditalic"
+                android:text="@string/timer1"
+                android:textColor="@color/BlckBlue"
+                android:textStyle="bold"
+                android:textSize="33sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/overlapContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/foodLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="55dp">
+
+            <ImageView
+                android:id="@+id/TransPic"
+                android:layout_width="350dp"
+                android:layout_height="230dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/homebluecurve" />
+
+            <TextView
+                android:id="@+id/questionText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_bold"
+                android:textAlignment="center"
+                android:text="@string/postqeus1"
+                android:textColor="@color/WBlue"
+                android:textSize="25sp"
+                android:textStyle="normal" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/afacad"
+            android:gravity="center"
+            android:text="@string/guideRB"
+            android:textColor="#6d835b"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/overlapContainer" />
+
+        <RadioGroup
+            android:id="@+id/radiopostQ24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide">
+
+            <RadioButton
+                android:id="@+id/prebtn1a"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/postasschoices"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_marginTop="21dp"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:paddingStart="10dp"
+                android:text="@string/preQ12a"
+                android:textColor="@color/BlckBlue" />
+
+            <RadioButton
+                android:id="@+id/prebtn1b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/postasschoices"
+                android:fontFamily="@font/poppinsregular"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:paddingStart="10dp"
+                android:text="@string/preQ12b"
+                android:textColor="@color/BlckBlue" />
+
+            <RadioButton
+                android:id="@+id/prebtn1c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/postasschoices"
+                android:fontFamily="@font/poppinsregular"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:paddingStart="10dp"
+                android:text="@string/preQ12c"
+                android:textColor="@color/BlckBlue" />
+
+            <RadioButton
+                android:id="@+id/prebtn1d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/postasschoices"
+                android:fontFamily="@font/poppinsregular"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:paddingStart="10dp"
+                android:text="@string/preQ12d"
+                android:textColor="@color/BlckBlue" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/bttnchoice1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radiopostQ24">
+
+            <Button
+                android:id="@+id/postq24"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnblue"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
+                android:text="@string/submit"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/postnext24"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnblue1"
+                android:fontFamily="@font/poppinsregular"
+                android:textAllCaps="false"
+                android:text="@string/next"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
