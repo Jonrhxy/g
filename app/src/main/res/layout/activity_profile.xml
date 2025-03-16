@@ -402,7 +402,6 @@
                             android:textStyle="bold"
                             android:layout_marginBottom="12dp"/>
 
-
                         <TextView
                             android:id="@+id/actlogtxt"
                             android:layout_width="250sp"
@@ -414,12 +413,10 @@
                             android:textColor="@color/WRed"
                             android:textSize="15sp"
                             android:layout_marginBottom="12dp"/>
-
                     </LinearLayout>
-
                 </LinearLayout>
 
-                <!-- Selected Character Section (NO Shop button) -->
+                <!-- Selected Character Section -->
                 <LinearLayout
                     android:id="@+id/selectedCharacterContainer"
                     android:layout_width="match_parent"
@@ -469,8 +466,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:clipToPadding="false" />
-
                 </LinearLayout>
+
+                <!-- NEW: Line Chart for Strava-like style -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
 
                 <!-- Bottom Button inside ScrollView -->
                 <Button

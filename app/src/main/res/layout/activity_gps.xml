@@ -6,254 +6,224 @@
     android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@drawable/bg_leaderboard"
     tools:context=".GPS">
 
-    <!-- 1) Curved header image at the top -->
-    <ImageView
-        android:id="@+id/imageHeader"
-        android:layout_width="426dp"
-        android:layout_height="189dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/header_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 2) Back arrow on top-left of the header -->
-    <ImageView
-        android:id="@+id/imageBackArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="Back Arrow"
-        android:src="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="@id/imageHeader"
-        app:layout_constraintTop_toTopOf="@id/imageHeader" />
-
-    <!-- 3) Main title, centered horizontally on the header (using sp) -->
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TRACK YOUR DISTANCE"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="@id/imageHeader"
-        app:layout_constraintStart_toStartOf="@id/imageHeader"
-        app:layout_constraintEnd_toEndOf="@id/imageHeader" />
-
-    <!-- 4) Subtitle, also centered, below the main title (using sp) -->
-    <TextView
-        android:id="@+id/textSubtitle"
-        android:layout_width="261dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="Small choices, big impact! Choose green travel and help the planet!"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/imageHeader"
-        app:layout_constraintStart_toStartOf="@id/imageHeader"
-        app:layout_constraintTop_toBottomOf="@id/textTitle" />
-
-    <!-- 5) Progress bar row: walking icon, horizontal bar, badge icon -->
-    <LinearLayout
-        android:id="@+id/progressBarRow"
+    <!-- 1) Top container for the map (about 45% of screen height) -->
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/imageHeader"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.45">
 
-        <ImageView
-            android:id="@+id/imageWalking"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="Walking Icon"
-            android:src="@drawable/black_walk_icon" />
+        <!-- The map behind everything -->
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-        <ProgressBar
-            android:id="@+id/progressSteps"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:indeterminateOnly="false"
-            android:max="1000"
-            android:progress="0"
-            android:progressDrawable="@drawable/progress_horizontal" />
+        <!-- Optional overlay can be added here if needed -->
+    </FrameLayout>
 
-        <!-- Badge icon (fixed size, stretchable) -->
-        <ImageView
-            android:id="@+id/imageBadge"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="Badge Icon"
-            android:src="@drawable/goal_check"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
-    </LinearLayout>
-
-    <!-- 6) Card-like container for distance/time/steps, carbon emission, and button -->
-    <LinearLayout
+    <!-- 2) CardView holding your stats: distance, time, steps, CO₂ reduced, plus a spinner. -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardStats"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@id/mapContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarRow">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Row for Distance + Time -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- Left (Distance) -->
+            <!-- Row 1: Distance & Time -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textDistanceLabel"
-                    android:layout_width="wrap_content"
+                <!-- Distance (km) -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="DISTANCE (km)"
-                    android:textSize="35px"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textDistanceValue"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/textDistanceValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/textDistanceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Distance (km)"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+
+                <!-- Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="45px" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textTimeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/textTimeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- Right (Time) -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TIME"
-                    android:textSize="35px"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textTimeValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:00"
-                    android:textSize="45px" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Row for displaying step count + button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textStepsLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="STEPS"
-                android:textSize="35px"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textStepsValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="0"
-                android:textSize="45px" />
-
-            <!-- A spacer to push the button to the right -->
+            <!-- Spacing between rows -->
             <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
 
-            <!-- Single button to Start → Pause → Resume -->
-            <Button
-                android:id="@+id/buttonStartStop"
-                android:layout_width="wrap_content"
+            <!-- Row 2: Steps & CO₂ Reduced -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_rounded_rectangle"
-                android:text="START"
-                android:textColor="@android:color/white"
-                app:backgroundTint="@null" />
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <!-- Horizontal row for CO₂ text (smaller) + Spinner -->
-        <LinearLayout
-            android:id="@+id/co2Layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+                <!-- Steps -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/textStepsValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/textStepsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1500 Steps Goal"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+
+                <!-- CO₂ Reduced -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textCo2Value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00 kg"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/textCo2Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CO₂ Reduced"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Spacing between rows -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <!-- Instruction text for the spinner -->
             <TextView
-                android:id="@+id/textCarbonEmission"
-                android:layout_width="188dp"
+                android:id="@+id/textSpinnerInstruction"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Walking saved 0.00 kg CO₂ vs. using a car."
+                android:text="Choose a Comparison mode below to compare how much CO₂ you save by walking instead!"
                 android:textColor="@android:color/black"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner
-                android:id="@+id/spinnerTransportMode"
-                android:layout_width="wrap_content"
+            <!-- Row 3: Spinner for transport mode -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textModeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comparison Mode:"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@android:color/black" />
+
+                <Spinner
+                    android:id="@+id/spinnerTransportMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
-
-    <!-- 7) Bottom section (map) occupies remaining space below cardStats -->
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapView"
+    <!-- 3) Button at the bottom (e.g., "View Analysis" or "Start") -->
+    <Button
+        android:id="@+id/buttonViewAnalysis"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/white"
+        android:layout_height="wrap_content"
+        android:text="Start to Reduce Your Carbon Footprint"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_orange_dark"
         app:layout_constraintTop_toBottomOf="@id/cardStats"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
