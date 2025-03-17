@@ -79,7 +79,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- NOTIFICATION, GIFT, SETTINGS ICONS ON RIGHT -->
+    <!-- NOTIFICATION, SETTINGS, SHOP ICONS ON RIGHT -->
     <LinearLayout
         android:id="@+id/iconsOnRightLayout"
         android:layout_width="wrap_content"
@@ -468,9 +468,34 @@
                         android:clipToPadding="false" />
                 </LinearLayout>
 
-                <!-- NEW: Line Chart for Strava-like style -->
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/lineChart"
+                <!-- New RadioGroup for Weekly/Monthly toggle -->
+                <RadioGroup
+                    android:id="@+id/radioGroupTimeRange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_gravity="center_horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioWeekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weekly"
+                        android:checked="true"
+                        android:textColor="@android:color/white"/>
+
+                    <RadioButton
+                        android:id="@+id/radioMonthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monthly"
+                        android:textColor="@android:color/white"/>
+                </RadioGroup>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginTop="16dp"
@@ -482,16 +507,13 @@
                     android:layout_width="200sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5sp"
-                    android:layout_marginBottom="15sp"
+                    android:layout_marginBottom="15dp"
                     android:text="@string/selectChar"
                     android:background="@drawable/btnblue"
                     android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/BlckBlue"
                     android:layout_gravity="center_horizontal"/>
-
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

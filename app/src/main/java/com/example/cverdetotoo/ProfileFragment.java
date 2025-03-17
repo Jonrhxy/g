@@ -1,11 +1,9 @@
 package com.example.cverdetotoo;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,41 +23,34 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
 
-/**
- * Example ProfileFragment that fetches multiple fields:
- *  - date (e.g., "20250315")
- *  - time (e.g., "15:48")
- *  - co2Saved (double)
- *  - distanceSoFarKm (double)
- *  - stepsSoFar (long)
- *
- * and displays them on a single multi-line chart.
- */
 public class ProfileFragment extends Fragment {
 
     private TextView textCoinValue, Coins;
@@ -71,8 +62,9 @@ public class ProfileFragment extends Fragment {
     private RecyclerView recyclerUnlockedChars;
     private ImageView shopIcon;
 
-    // Our multi-line chart
-    private LineChart lineChart;
+    // BarChart replaces the old LineChart
+    private BarChart barChart;
+    private RadioGroup radioGroupTimeRange;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -83,29 +75,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Ensure your layout has a BarChart with id "barChart"
         return inflater.inflate(R.layout.activity_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         // Basic UI setup
         FrameLayout settingsLayout = view.findViewById(R.id.settingsLayout);
-        settingsLayout.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), Settings.class));
-        });
+        settingsLayout.setOnClickListener(v -> startActivity(new Intent(getActivity(), Settings.class)));
 
         TextView textSeeAll = view.findViewById(R.id.textSeeAll);
-        textSeeAll.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.constraintLayout, new BadgesFragment())
-                    .commit();
-        });
+        textSeeAll.setOnClickListener(v -> getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.constraintLayout, new BadgesFragment())
+                .commit());
 
         TextView textGreeting = view.findViewById(R.id.textGreeting);
         if (mAuth.getCurrentUser() != null) {
@@ -115,11 +103,11 @@ public class ProfileFragment extends Fragment {
                 userDocRef.get().addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String firstName = task.getResult().getString("firstName");
-                        if (firstName != null && !firstName.isEmpty()) {
-                            textGreeting.setText("Hi, " + firstName + "!");
-                        } else {
-                            textGreeting.setText("Hi!");
-                        }
+                        textGreeting.setText(
+                                firstName != null && !firstName.isEmpty()
+                                        ? "Hi, " + firstName + "!"
+                                        : "Hi!"
+                        );
                     } else {
                         Toast.makeText(getActivity(), "Failed to fetch user data", Toast.LENGTH_SHORT).show();
                         textGreeting.setText("Hi!");
@@ -133,9 +121,7 @@ public class ProfileFragment extends Fragment {
         }
 
         Button activityLog = view.findViewById(R.id.btnActivityLog);
-        activityLog.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), ActivityLog.class));
-        });
+        activityLog.setOnClickListener(v -> startActivity(new Intent(getActivity(), ActivityLog.class)));
 
         // Coins & Points
         textCoinValue = view.findViewById(R.id.textCoinValue);
@@ -146,10 +132,7 @@ public class ProfileFragment extends Fragment {
         fetchGamePoints();
 
         shopIcon = view.findViewById(R.id.imageShop);
-        shopIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MiniShopActivity.class);
-            startActivity(intent);
-        });
+        shopIcon.setOnClickListener(v -> startActivity(new Intent(getActivity(), MiniShopActivity.class)));
 
         ImageView coinIcon = view.findViewById(R.id.imageCoinIcon);
         coinIcon.setOnClickListener(null);
@@ -161,8 +144,6 @@ public class ProfileFragment extends Fragment {
         // Load characters from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
         List<CharacterModel> allCharacters = loadCharactersFromStorage(prefs);
-
-        // Show selected character
         String selectedCharacterId = prefs.getString("selectedCharacterId", "char001");
         CharacterModel selectedCharacter = findSelectedCharacter(allCharacters, selectedCharacterId);
         if (selectedCharacter != null) {
@@ -170,36 +151,49 @@ public class ProfileFragment extends Fragment {
             textSelectedCharacterName.setText(selectedCharacter.getName());
         }
 
-        // Build unlocked list
+        // Build unlocked character list
         List<CharacterModel> unlockedList = new ArrayList<>();
         for (CharacterModel c : allCharacters) {
             if (c.isUnlocked()) {
                 unlockedList.add(c);
             }
         }
-
-        UnlockedCharAdapter adapter = new UnlockedCharAdapter(unlockedList, character -> {
-            prefs.edit().putString("selectedCharacterId", character.getId()).apply();
-            imageSelectedCharacter.setImageResource(character.getImageResId());
-            textSelectedCharacterName.setText(character.getName());
-        });
-        recyclerUnlockedChars.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        UnlockedCharAdapter adapter = new UnlockedCharAdapter(
+                unlockedList,
+                character -> {
+                    prefs.edit().putString("selectedCharacterId", character.getId()).apply();
+                    imageSelectedCharacter.setImageResource(character.getImageResId());
+                    textSelectedCharacterName.setText(character.getName());
+                }
+        );
+        recyclerUnlockedChars.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerUnlockedChars.setAdapter(adapter);
 
         // Optional bottom button
         Button bottomButton = view.findViewById(R.id.bottomButton);
-        bottomButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Bottom button clicked", Toast.LENGTH_SHORT).show();
+        bottomButton.setOnClickListener(v ->
+                Toast.makeText(getActivity(), "Bottom button clicked", Toast.LENGTH_SHORT).show()
+        );
+
+        // Initialize the BarChart (ensure your XML has a BarChart with id "barChart")
+        barChart = view.findViewById(R.id.barChart);
+
+        // RadioGroup to toggle weekly/monthly views (ensure IDs are set in layout)
+        radioGroupTimeRange = view.findViewById(R.id.radioGroupTimeRange);
+        radioGroupTimeRange.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioWeekly) {
+                fetchTrackingDataForBar(true);
+            } else if (checkedId == R.id.radioMonthly) {
+                fetchTrackingDataForBar(false);
+            }
         });
+        // Default to weekly view:
+        fetchTrackingDataForBar(true);
 
-        // Initialize the line chart
-        lineChart = view.findViewById(R.id.lineChart);
+        // Fetch total steps for tower (to check if the user reached 10,000 steps)
+        fetchTotalStepsForTower();
 
-        // Fetch multi-field data from Firestore
-        fetchTrackingWalkData();
-
-        // ======= New Code: Re-enable ImageNotification click to launch Messenger =======
+        // Notification icon click
         ImageView imageNotification = view.findViewById(R.id.imageNotification);
         imageNotification.setClickable(true);
         imageNotification.setFocusable(true);
@@ -207,22 +201,250 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getActivity(), "Opening Messenger...", Toast.LENGTH_SHORT).show();
             String messengerLink = "https://m.me/9335554949869793?is_ai=1";
             Intent messengerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(messengerLink));
-            // Force the intent to be handled by Messenger app (uncomment if you want to force it)
             messengerIntent.setPackage("com.facebook.orca");
             startActivity(messengerIntent);
         });
     }
 
+    /**
+     * Fetch tracking data and build a BarChart.
+     * If isWeekly is true, display daily data (Mon→Sun) with two side-by-side bars:
+     * one for Steps (left axis) and one for CO₂ saved (right axis).
+     * If isWeekly is false, group the last 30 days by week (using Monday as key)
+     * and aggregate the data.
+     */
+    private void fetchTrackingDataForBar(boolean isWeekly) {
+        if (mAuth.getCurrentUser() == null) return;
+        String username = mAuth.getCurrentUser().getDisplayName();
+        if (username == null || username.isEmpty()) return;
+
+        db.collection("Games")
+                .document(username)
+                .collection("trackingwalk")
+                .orderBy("date")
+                .get()
+                .addOnSuccessListener(queryDocSnapshots -> {
+                    List<DocumentSnapshot> docs = queryDocSnapshots.getDocuments();
+                    Log.d("BarData", "Total docs: " + docs.size());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                    Map<String, DocumentSnapshot> dataMap = new HashMap<>();
+                    for (DocumentSnapshot doc : docs) {
+                        String dateStr = doc.getString("date");
+                        if (dateStr != null) {
+                            dataMap.put(dateStr, doc);
+                        }
+                    }
+
+                    if (isWeekly) {
+                        // Weekly mode: show current week (Mon → Sun)
+                        String[] labels = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+                        List<BarEntry> stepsEntries = new ArrayList<>();
+                        List<BarEntry> co2Entries = new ArrayList<>();
+
+                        Calendar cal = Calendar.getInstance();
+                        // Start from Monday of current week
+                        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                        for (int i = 0; i < 7; i++) {
+                            String dateKey = sdf.format(cal.getTime());
+                            float stepsVal = 0f;
+                            float co2Val = 0f;
+                            if (dataMap.containsKey(dateKey)) {
+                                DocumentSnapshot snap = dataMap.get(dateKey);
+                                Long steps = snap.getLong("stepsSoFar");
+                                Double co2 = snap.getDouble("co2Saved");
+                                Log.d("BarData", "Weekly day=" + dateKey + ", steps=" + steps + ", co2=" + co2);
+                                if (steps != null) {
+                                    stepsVal = steps.floatValue();
+                                }
+                                if (co2 == null) {
+                                    co2 = 0.0;
+                                }
+                                co2Val = co2.floatValue();
+                            }
+                            // Steps at x = i, CO₂ at x = i + 0.5 for side-by-side display
+                            stepsEntries.add(new BarEntry(i, stepsVal));
+                            co2Entries.add(new BarEntry(i + 0.5f, co2Val));
+                            cal.add(Calendar.DAY_OF_YEAR, 1);
+                        }
+                        BarDataSet dsSteps = new BarDataSet(stepsEntries, "Steps");
+                        dsSteps.setAxisDependency(YAxis.AxisDependency.LEFT);
+                        dsSteps.setColor(Color.BLUE);
+                        dsSteps.setValueTextColor(Color.WHITE);
+
+                        // OPTIONAL: Format steps as integers
+                        dsSteps.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                // Show as integer
+                                return String.format(Locale.getDefault(), "%.0f", value);
+                            }
+                        });
+
+                        BarDataSet dsCo2 = new BarDataSet(co2Entries, "CO₂ Saved (kg)");
+                        dsCo2.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                        dsCo2.setColor(Color.GREEN);
+                        dsCo2.setValueTextColor(Color.WHITE);
+
+                        // Format CO₂ with 3 decimals
+                        dsCo2.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                return String.format(Locale.getDefault(), "%.3f", value);
+                            }
+                        });
+
+                        BarData barData = new BarData(dsSteps, dsCo2);
+                        barData.setBarWidth(0.45f);
+
+                        setupBarChart(labels, barData, "Weekly Steps & CO₂ (Mon→Sun)");
+                    } else {
+                        // Monthly mode: group last 30 days by week (using Monday as key)
+                        Calendar today = Calendar.getInstance();
+                        Calendar startCal = Calendar.getInstance();
+                        startCal.add(Calendar.DAY_OF_YEAR, -29);
+                        Map<String, float[]> weekData = new TreeMap<>();
+                        Calendar tempCal = (Calendar) startCal.clone();
+                        while (!tempCal.after(today)) {
+                            Calendar mondayCal = (Calendar) tempCal.clone();
+                            mondayCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                            String mondayKey = sdf.format(mondayCal.getTime());
+                            if (!weekData.containsKey(mondayKey)) {
+                                // [0]: sum of CO₂, [1]: sum of Steps
+                                weekData.put(mondayKey, new float[]{0f, 0f});
+                            }
+                            String dayKey = sdf.format(tempCal.getTime());
+                            if (dataMap.containsKey(dayKey)) {
+                                DocumentSnapshot snap = dataMap.get(dayKey);
+                                Long steps = snap.getLong("stepsSoFar");
+                                Double co2 = snap.getDouble("co2Saved");
+                                Log.d("BarData", "Monthly day=" + dayKey + ", steps=" + steps + ", co2=" + co2);
+                                if (co2 == null) {
+                                    co2 = 0.0;
+                                }
+                                float[] current = weekData.get(mondayKey);
+                                current[0] += co2.floatValue();
+                                current[1] += (steps != null) ? steps : 0f;
+                            }
+                            tempCal.add(Calendar.DAY_OF_YEAR, 1);
+                        }
+                        int size = weekData.size();
+                        String[] labels = new String[size];
+                        List<BarEntry> stepsEntries = new ArrayList<>();
+                        List<BarEntry> co2Entries = new ArrayList<>();
+                        int index = 0;
+                        SimpleDateFormat weekLabelFormat = new SimpleDateFormat("MM/dd", Locale.getDefault());
+                        for (Map.Entry<String, float[]> entry : weekData.entrySet()) {
+                            try {
+                                Date mondayDate = sdf.parse(entry.getKey());
+                                labels[index] = "Week of\n" + weekLabelFormat.format(mondayDate);
+                            } catch (ParseException e) {
+                                labels[index] = "Week of\n" + entry.getKey();
+                            }
+                            float sumCo2 = entry.getValue()[0];
+                            float sumSteps = entry.getValue()[1];
+                            stepsEntries.add(new BarEntry(index, sumSteps));
+                            co2Entries.add(new BarEntry(index + 0.5f, sumCo2));
+                            index++;
+                        }
+                        BarDataSet dsSteps = new BarDataSet(stepsEntries, "Steps");
+                        dsSteps.setAxisDependency(YAxis.AxisDependency.LEFT);
+                        dsSteps.setColor(Color.BLUE);
+                        dsSteps.setValueTextColor(Color.WHITE);
+
+                        // OPTIONAL: Format steps as integers
+                        dsSteps.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                return String.format(Locale.getDefault(), "%.0f", value);
+                            }
+                        });
+
+                        BarDataSet dsCo2 = new BarDataSet(co2Entries, "CO₂ Saved (kg)");
+                        dsCo2.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                        dsCo2.setColor(Color.GREEN);
+                        dsCo2.setValueTextColor(Color.WHITE);
+
+                        // Format CO₂ with 3 decimals
+                        dsCo2.setValueFormatter(new ValueFormatter() {
+                            @Override
+                            public String getFormattedValue(float value) {
+                                return String.format(Locale.getDefault(), "%.3f", value);
+                            }
+                        });
+
+                        BarData barData = new BarData(dsSteps, dsCo2);
+                        barData.setBarWidth(0.45f);
+
+                        setupBarChart(labels, barData, "Monthly Progress (30d grouped by week)");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("BarData", "Error fetching tracking data", e);
+                });
+    }
+
+    /**
+     * Helper method to configure the BarChart with given X-axis labels, BarData, and a description.
+     */
+    private void setupBarChart(String[] labels, BarData barData, String descriptionText) {
+        barChart.clear();
+        barChart.setData(barData);
+        barChart.notifyDataSetChanged();
+        barChart.invalidate();
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setLabelCount(labels.length, true);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int i = Math.round(value);
+                if (i >= 0 && i < labels.length) {
+                    return labels[i];
+                }
+                return "";
+            }
+        });
+
+        // Left axis for Steps
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setAxisMinimum(0f);
+
+        // Right axis for CO₂
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(true);
+        rightAxis.setTextColor(Color.GREEN);
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setAxisMinimum(0f);
+
+        // Remove or comment out the following line to let it auto-scale:
+        // rightAxis.setAxisMaximum(1f);
+
+        Legend legend = barChart.getLegend();
+        legend.setTextColor(Color.WHITE);
+
+        barChart.getDescription().setText(descriptionText);
+        barChart.getDescription().setTextColor(Color.WHITE);
+    }
+
     // -------------------------------------------------
-    // 1) Fetch coin points
+    // Fetch coin points (same as original)
     // -------------------------------------------------
     private void fetchCoinPoints() {
         if (mAuth.getCurrentUser() != null) {
             String username = mAuth.getCurrentUser().getDisplayName();
             if (username != null && !username.isEmpty()) {
+
                 final long[] totalCoins = {0};
 
-                db.collection("Games")
+                // 1) First fetch coins from the top-level document: Gamez/username
+                db.collection("Gamez")
                         .document(username)
                         .get()
                         .addOnSuccessListener(docSnap -> {
@@ -232,8 +454,35 @@ public class ProfileFragment extends Fragment {
                                     totalCoins[0] += mainCoins;
                                 }
                             }
-                            textCoinValue.setText(String.valueOf(totalCoins[0]));
-                            Coins.setText(String.valueOf(totalCoins[0]));
+
+                            // 2) Then fetch coins from *all* documents in the 'records' subcollection
+                            db.collection("Gamez")
+                                    .document(username)
+                                    .collection("records")
+                                    .get()
+                                    .addOnSuccessListener(querySnapshot -> {
+                                        for (DocumentSnapshot snap : querySnapshot) {
+                                            if (snap.exists()) {
+                                                Long recordCoins = snap.getLong("coins");
+                                                if (recordCoins != null) {
+                                                    totalCoins[0] += recordCoins;
+                                                }
+                                            }
+                                        }
+
+                                        // Now update the UI with the total
+                                        textCoinValue.setText(String.valueOf(totalCoins[0]));
+                                        Coins.setText(String.valueOf(totalCoins[0]));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // If we fail fetching subcollection coins,
+                                        // still show whatever we got from the main doc
+                                        textCoinValue.setText(String.valueOf(totalCoins[0]));
+                                        Coins.setText(String.valueOf(totalCoins[0]));
+                                        Toast.makeText(getActivity(),
+                                                "Failed to fetch records coins: " + e.getMessage(),
+                                                Toast.LENGTH_SHORT).show();
+                                    });
                         })
                         .addOnFailureListener(e -> {
                             textCoinValue.setText("0");
@@ -248,18 +497,18 @@ public class ProfileFragment extends Fragment {
             }
         } else {
             textCoinValue.setText("0");
+            Coins.setText("0");
         }
     }
 
     // -------------------------------------------------
-    // 2) Fetch game points
+    // Fetch game points (same as original)
     // -------------------------------------------------
     private void fetchGamePoints() {
         if (mAuth.getCurrentUser() != null) {
             String username = mAuth.getCurrentUser().getDisplayName();
             if (username != null && !username.isEmpty()) {
                 final long[] totalPoints = {0};
-
                 db.collection("Games")
                         .document(username)
                         .get()
@@ -274,9 +523,7 @@ public class ProfileFragment extends Fragment {
                         })
                         .addOnFailureListener(e -> {
                             textPointsValue.setText("0");
-                            Toast.makeText(getActivity(),
-                                    "Failed to fetch main doc points: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Failed to fetch main doc points: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             } else {
                 textPointsValue.setText("0");
@@ -287,9 +534,10 @@ public class ProfileFragment extends Fragment {
     }
 
     // -------------------------------------------------
-    // 3) Fetch data from "trackingwalk" and build multi-line chart
+    // Fetch total steps (all time) for tower stepping stone logic.
+    // If total steps >= 10,000, award 1,000 points by updating the "points" field in the Games document.
     // -------------------------------------------------
-    private void fetchTrackingWalkData() {
+    private void fetchTotalStepsForTower() {
         if (mAuth.getCurrentUser() == null) return;
         String username = mAuth.getCurrentUser().getDisplayName();
         if (username == null || username.isEmpty()) return;
@@ -298,161 +546,54 @@ public class ProfileFragment extends Fragment {
                 .document(username)
                 .collection("trackingwalk")
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    double[] weeklyCo2 = new double[7];
-                    String[] dayLabels = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-
-                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        String dateStr = snapshot.getString("date");
-                        if (dateStr == null) continue;
-
-                        try {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                            Date date = sdf.parse(dateStr);
-                            if (date == null) continue;
-
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(date);
-                            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-                            Double co2Val = snapshot.getDouble("co2Saved");
-                            if (co2Val != null) {
-                                weeklyCo2[dayOfWeek - 1] = co2Val;
-                            }
-                        } catch (ParseException e) {
-                            Log.e("FirestoreDebug", "Error parsing date: " + dateStr, e);
+                .addOnSuccessListener(queryDocSnapshots -> {
+                    long totalSteps = 0;
+                    for (DocumentSnapshot doc : queryDocSnapshots) {
+                        Long steps = doc.getLong("stepsSoFar");
+                        if (steps != null) {
+                            totalSteps += steps;
                         }
                     }
-
-                    List<Entry> co2Entries = new ArrayList<>();
-                    for (int i = 0; i < 7; i++) {
-                        co2Entries.add(new Entry(i, (float) weeklyCo2[i]));
+                    Log.d("TowerDebug", "User total steps: " + totalSteps);
+                    if (totalSteps >= 10000) {
+                        awardPointsForStepGoal(username);
                     }
-
-                    LineDataSet co2DataSet = new LineDataSet(co2Entries, "CO2 Saved (kg)");
-                    styleDataSet(co2DataSet, Color.GREEN);
-                    co2DataSet.setValueTextColor(Color.WHITE); // Make data point text white
-
-                    LineData lineData = new LineData(co2DataSet);
-
-                    lineChart.setData(lineData);
-
-                    XAxis xAxis = lineChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setValueFormatter(new ValueFormatter() {
-                        @Override
-                        public String getFormattedValue(float value) {
-                            if (value >= 0 && value < dayLabels.length) {
-                                return dayLabels[(int) value];
-                            }
-                            return "";
-                        }
-                    });
-                    xAxis.setLabelCount(7, true);
-                    xAxis.setTextColor(Color.WHITE);
-
-                    YAxis leftAxis = lineChart.getAxisLeft();
-                    leftAxis.setDrawGridLines(true);
-                    leftAxis.setGridColor(Color.LTGRAY);
-                    leftAxis.setAxisLineColor(Color.TRANSPARENT);
-                    leftAxis.setLabelCount(4, true);
-                    leftAxis.setTextColor(Color.WHITE);
-
-                    lineChart.getAxisRight().setEnabled(false);
-
-                    double totalCo2 = 0;
-                    for (double co2 : weeklyCo2) {
-                        totalCo2 += co2;
-                    }
-
-                    DecimalFormat df = new DecimalFormat("#.##");
-                    String totalCo2Str = df.format(totalCo2);
-
-                    lineChart.getDescription().setText("Total CO2 reduced this week: " + totalCo2Str + " kg");
-                    lineChart.getDescription().setTextColor(Color.WHITE);
-                    lineChart.getDescription().setEnabled(true);
-                    lineChart.getDescription().setPosition(lineChart.getWidth() / 2, 20);
-                    lineChart.getDescription().setTextAlign(Paint.Align.CENTER);
-
-                    lineChart.getLegend().setEnabled(false);
-
-                    lineChart.invalidate();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getActivity(),
-                            "Failed to fetch trackingwalk data: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                    Log.e("FirestoreDebug", "Error: ", e);
+                    Log.e("TowerDebug", "Failed to fetch steps for tower", e);
                 });
     }
-    /**
-     * Simple helper to style each DataSet with cubic lines, no circle, etc.
-     */
-    private void styleDataSet(LineDataSet dataSet, int color) {
-        dataSet.setColor(color);
-        dataSet.setLineWidth(2f);
-        dataSet.setCircleColor(color);
-        dataSet.setCircleRadius(3f);
-        dataSet.setValueTextSize(8f);
-
-        // For a smooth Strava-like curve:
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setCubicIntensity(0.2f);
-
-        // If you don't want circles or values, comment these out:
-        // dataSet.setDrawCircles(false);
-        // dataSet.setDrawValues(false);
-    }
 
     /**
-     * Parse a date string like "20250315" into a float for sorting.
-     * Adjust to your actual format if needed (e.g., "yyyy-MM-dd").
+     * Award 1,000 points to the user by updating the "points" field in the Games document,
+     * but only if current points are less than 1000.
      */
-    private float parseDateToFloat(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        try {
-            Date date = sdf.parse(dateStr);
-            if (date != null) {
-                // Convert to "days since epoch"
-                return (float) (date.getTime() / (1000 * 60 * 60 * 24));
+    private void awardPointsForStepGoal(String username) {
+        DocumentReference gameDoc = db.collection("Games").document(username);
+        gameDoc.get().addOnSuccessListener(docSnap -> {
+            if (docSnap.exists()) {
+                Long currentPoints = docSnap.getLong("points");
+                if (currentPoints == null || currentPoints < 1000) {
+                    gameDoc.update("points", 1000)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("TowerDebug", "Awarded 1000 points for reaching 10000 steps.");
+                                Toast.makeText(getActivity(), "Congratulations! You reached 10000 steps and earned 1000 points!", Toast.LENGTH_LONG).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("TowerDebug", "Failed to award points", e);
+                            });
+                } else {
+                    Log.d("TowerDebug", "User already has " + currentPoints + " points; not awarding.");
+                }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0f;
+        }).addOnFailureListener(e -> {
+            Log.e("TowerDebug", "Error reading game document", e);
+        });
     }
 
-    /**
-     * Convert the float date value (days since epoch) back to a label, e.g. "Mar 15".
-     */
-    private String floatToDateLabel(float value) {
-        long millis = (long) (value * (1000 * 60 * 60 * 24));
-        Date date = new Date(millis);
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d");
-        return sdf.format(date);
-    }
-
-    /**
-     * If you want to parse "15:48" -> 15*60 + 48 = 948 (minutes),
-     * so you can display or chart it numerically.
-     */
-    private float parseTimeToFloat(String timeStr) {
-        if (timeStr == null) return 0f;
-        String[] parts = timeStr.split(":");
-        if (parts.length == 2) {
-            try {
-                int hour = Integer.parseInt(parts[0]);
-                int minute = Integer.parseInt(parts[1]);
-                return hour * 60 + minute;
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        return 0f;
-    }
-
-    // Load characters from SharedPreferences
+    // -------------------------------------------------
+    // Load characters from SharedPreferences (same as original)
+    // -------------------------------------------------
     private List<CharacterModel> loadCharactersFromStorage(SharedPreferences prefs) {
         String json = prefs.getString("characters", null);
         if (json != null) {

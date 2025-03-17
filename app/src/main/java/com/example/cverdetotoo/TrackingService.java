@@ -10,24 +10,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
@@ -38,16 +33,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 
-public class TrackingService extends Service {
+public class TrackingService extends Service implements LocationListener {
 
     private static final String TAG = "TrackingService";
 
-    // Constants for steps and thresholds
+    // Constants
     private static final int STEPS_PER_KM = 1316;
     private static final int GOAL_STEPS = 1500;
     private static final float SPEED_THRESHOLD = 2.5f;
@@ -74,6 +69,7 @@ public class TrackingService extends Service {
     private TransportMode selectedMode = TransportMode.CAR;
 
     // Tracking fields
+    private LocationManager locationManager;
     private List<Location> locations = new ArrayList<>();
     private float totalDistance = 0;   // in meters
     private long startTime = 0;        // tracking start time (ms)
@@ -94,50 +90,38 @@ public class TrackingService extends Service {
     private String currentSessionId = null;
     private boolean isRewardGiven = false;
 
-    // Fused Location Provider
-    private FusedLocationProviderClient fusedLocationClient;
-    private LocationCallback fusedLocationCallback;
-    private LocationRequest locationRequest;
-
     @Override
     public void onCreate() {
         super.onCreate();
         try {
-            // Reset data if a new day, and load saved service data
             checkAndResetDataIfNewDayService();
             loadServiceData();
 
-            // Get mode from SharedPreferences
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             int savedModeIndex = prefs.getInt(KEY_SELECTED_MODE_INDEX, 0);
             selectedMode = mapSpinnerIndexToMode(savedModeIndex);
 
-            // Use today's date as the session id
+            // Use today's date as doc ID
             currentSessionId = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(KEY_SESSION_ID, currentSessionId);
             editor.commit();
 
-            // Get Firebase user displayName
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (currentUser != null && currentUser.getDisplayName() != null) {
                 displayName = currentUser.getDisplayName();
             }
             Log.d(TAG, "onCreate: Using displayName=" + displayName);
+
             db = FirebaseFirestore.getInstance();
 
-            // Initialize fused location provider and create location request/callback
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            createLocationRequest();
-            createLocationCallback();
-            startFusedLocationUpdates();
-
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            requestLocationUpdates();
             startTime = System.currentTimeMillis();
 
             createNotificationChannel();
             buildNotification();
 
-            // Start the notification updater to refresh every second
             notificationUpdater = new Runnable() {
                 @Override
                 public void run() {
@@ -153,7 +137,6 @@ public class TrackingService extends Service {
         }
     }
 
-    // Map the spinner index to our TransportMode enum
     private TransportMode mapSpinnerIndexToMode(int index) {
         switch (index) {
             case 0: return TransportMode.CAR;
@@ -165,7 +148,6 @@ public class TrackingService extends Service {
         }
     }
 
-    // Check and reset data if the day has changed
     private void checkAndResetDataIfNewDayService() {
         try {
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -194,66 +176,6 @@ public class TrackingService extends Service {
         }
     }
 
-    // Create the location request for fused location provider
-    private void createLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setInterval(2000); // 2 seconds
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    // Create the location callback to handle location updates
-    private void createLocationCallback() {
-        fusedLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                if (locationResult == null) return;
-                for (Location location : locationResult.getLocations()) {
-                    processLocation(location);
-                }
-            }
-        };
-    }
-
-    // Start fused location updates
-    @SuppressWarnings("MissingPermission")
-    private void startFusedLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(locationRequest, fusedLocationCallback, Looper.getMainLooper());
-        }
-    }
-
-    // Stop fused location updates
-    private void stopFusedLocationUpdates() {
-        if (fusedLocationClient != null && fusedLocationCallback != null) {
-            fusedLocationClient.removeLocationUpdates(fusedLocationCallback);
-        }
-    }
-
-    // Process each location update (similar to your onLocationChanged logic)
-    private void processLocation(Location location) {
-        try {
-            if (location.hasAccuracy() && location.getAccuracy() > ACCURACY_THRESHOLD) return;
-            if (!locations.isEmpty()) {
-                Location lastLocation = locations.get(locations.size() - 1);
-                float distanceDelta = lastLocation.distanceTo(location);
-                // Ignore if too small a movement
-                if (distanceDelta < MIN_DISTANCE_DELTA || distanceDelta > MAX_DISTANCE_DELTA) return;
-                long timeDelta = location.getTime() - lastLocation.getTime();
-                if (timeDelta > 0) {
-                    float speed = distanceDelta / (timeDelta / 1000f);
-                    if (speed > SPEED_THRESHOLD) return;
-                }
-                totalDistance += distanceDelta;
-            }
-            locations.add(location);
-        } catch (Exception e) {
-            Log.e(TAG, "Error processing location: " + e.getMessage());
-        }
-    }
-
-    // Notification channel and builder methods
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelName = "Walking Tracker";
@@ -324,7 +246,6 @@ public class TrackingService extends Service {
             }
             double co2Saved = distanceKm * emissionFactor;
 
-            // Update custom notification layout
             RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_foreground);
             if (steps >= GOAL_STEPS) {
                 notificationLayout.setTextViewText(R.id.textTime, "Goal Reached!");
@@ -340,7 +261,6 @@ public class TrackingService extends Service {
             notificationBuilder.setCustomContentView(notificationLayout);
             startForeground(NOTIFICATION_ID, notificationBuilder.build());
 
-            // Broadcast update to UI
             Intent updateIntent = new Intent("com.example.walktracker.TRACKING_UPDATE");
             updateIntent.putExtra("elapsedTime", elapsedTime);
             updateIntent.putExtra("totalDistance", totalDistance);
@@ -376,14 +296,10 @@ public class TrackingService extends Service {
             }
             double co2Saved = distanceKm * emissionFactor;
 
-            String co2ComparisonBus = "CO₂ saved from walk compared to bus: " +
-                    String.format("%.2fkg", distanceKm * 0.08);
-            String co2ComparisonJeepney = "CO₂ saved from walk compared to Jeepney: " +
-                    String.format("%.2fkg", distanceKm * 0.15);
-            String co2ComparisonMotorcycle = "CO₂ saved from walk compared to Motorcycle: " +
-                    String.format("%.2fkg", distanceKm * 0.10);
-            String co2ComparisonTruck = "CO₂ saved from walk compared to Truck: " +
-                    String.format("%.2fkg", distanceKm * 0.30);
+            String co2ComparisonBus = "CO₂ saved from walk compared to bus: " + String.format("%.2fkg", distanceKm * 0.08);
+            String co2ComparisonJeepney = "CO₂ saved from walk compared to Jeepney: " + String.format("%.2fkg", distanceKm * 0.15);
+            String co2ComparisonMotorcycle = "CO₂ saved from walk compared to Motorcycle: " + String.format("%.2fkg", distanceKm * 0.10);
+            String co2ComparisonTruck = "CO₂ saved from walk compared to Truck: " + String.format("%.2fkg", distanceKm * 0.30);
 
             Map<String, Object> partialData = new HashMap<>();
             partialData.put("distanceSoFarKm", String.format(Locale.getDefault(), "%.2f", distanceKm));
@@ -408,7 +324,7 @@ public class TrackingService extends Service {
         }
     }
 
-    // Update coins from within the service
+    // New method to update coins from within the service.
     private void updateUserCoinsInService(int coinIncrement) {
         db.collection("Games")
                 .document(displayName)
@@ -417,14 +333,99 @@ public class TrackingService extends Service {
                 .update("coins", FieldValue.increment(coinIncrement))
                 .addOnSuccessListener(aVoid ->
                         Log.d(TAG, "Coins successfully updated in service."))
-                .addOnFailureListener(e ->
+                .addOnFailureListener((@NonNull Exception e) ->
                         Log.e(TAG, "Failed to update coins in service: " + e.getMessage()));
     }
 
-    /**
-     * Checks if the goal is reached; if so, stores the final record and awards coins.
-     * This method is called every second from the notification updater.
-     */
+    private void requestLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        2000,
+                        1,
+                        this
+                );
+            } catch (Exception e) {
+                Log.e(TAG, "Error requesting location updates: " + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            saveServiceData();
+            locationManager.removeUpdates(this);
+            handler.removeCallbacks(notificationUpdater);
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onDestroy: " + e.getMessage());
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        try {
+            if (location.hasAccuracy() && location.getAccuracy() > ACCURACY_THRESHOLD) return;
+            if (!locations.isEmpty()) {
+                Location lastLocation = locations.get(locations.size() - 1);
+                float distanceDelta = lastLocation.distanceTo(location);
+                if (distanceDelta < MIN_DISTANCE_DELTA || distanceDelta > MAX_DISTANCE_DELTA) return;
+                long timeDelta = location.getTime() - lastLocation.getTime();
+                if (timeDelta > 0) {
+                    float speed = distanceDelta / (timeDelta / 1000f);
+                    if (speed > SPEED_THRESHOLD) return;
+                }
+                totalDistance += distanceDelta;
+            }
+            locations.add(location);
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onLocationChanged: " + e.getMessage());
+        }
+    }
+
+    private void saveServiceData() {
+        try {
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putFloat(KEY_TOTAL_DISTANCE, totalDistance);
+            long currentActiveTime = totalActiveTime;
+            if (startTime > 0) {
+                currentActiveTime += (System.currentTimeMillis() - startTime);
+            }
+            editor.putLong(KEY_TOTAL_ACTIVE_TIME, currentActiveTime);
+            editor.commit();
+            Log.d(TAG, "saveServiceData: totalDistance=" + totalDistance
+                    + ", totalActiveTime=" + currentActiveTime);
+        } catch (Exception e) {
+            Log.e(TAG, "Error saving service data: " + e.getMessage());
+        }
+    }
+
+    private void loadServiceData() {
+        try {
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            totalDistance = prefs.getFloat(KEY_TOTAL_DISTANCE, 0f);
+            totalActiveTime = prefs.getLong(KEY_TOTAL_ACTIVE_TIME, 0L);
+            Log.d(TAG, "loadServiceData: totalDistance=" + totalDistance
+                    + ", totalActiveTime=" + totalActiveTime);
+        } catch (Exception e) {
+            Log.e(TAG, "Error loading service data: " + e.getMessage());
+        }
+    }
+
     private void storeTrackingRecordIfGoalReached() {
         try {
             if (isRewardGiven) return;
@@ -467,14 +468,10 @@ public class TrackingService extends Service {
             }
             double currentCo2Saved = distanceKm * emissionFactor;
 
-            String co2ComparisonBus = "CO₂ saved from walk compared to bus: " +
-                    String.format("%.2fkg", distanceKm * 0.08);
-            String co2ComparisonJeepney = "CO₂ saved from walk compared to Jeepney: " +
-                    String.format("%.2fkg", distanceKm * 0.15);
-            String co2ComparisonMotorcycle = "CO₂ saved from walk compared to Motorcycle: " +
-                    String.format("%.2fkg", distanceKm * 0.10);
-            String co2ComparisonTruck = "CO₂ saved from walk compared to Truck: " +
-                    String.format("%.2fkg", distanceKm * 0.30);
+            String co2ComparisonBus = "CO₂ saved from walk compared to bus: " + String.format("%.2fkg", distanceKm * 0.08);
+            String co2ComparisonJeepney = "CO₂ saved from walk compared to Jeepney: " + String.format("%.2fkg", distanceKm * 0.15);
+            String co2ComparisonMotorcycle = "CO₂ saved from walk compared to Motorcycle: " + String.format("%.2fkg", distanceKm * 0.10);
+            String co2ComparisonTruck = "CO₂ saved from walk compared to Truck: " + String.format("%.2fkg", distanceKm * 0.30);
 
             Map<String, Object> data = new HashMap<>();
             data.put("distanceSoFarKm", distanceString);
@@ -496,13 +493,12 @@ public class TrackingService extends Service {
                     .document(currentSessionId)
                     .set(data, SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
-                        // Award coins in the service as well.
                         updateUserCoinsInService(100);
                         db.collection("Games")
                                 .document(displayName)
                                 .update("highScore", FieldValue.increment(pointsEarned));
                     })
-                    .addOnFailureListener(e ->
+                    .addOnFailureListener((@NonNull Exception e) ->
                             Log.e(TAG, "Failed to update tracking record on goal: " + e.getMessage()));
         } catch (Exception e) {
             Log.e(TAG, "Error in storeTrackingRecordIfGoalReached: " + e.getMessage());
@@ -510,58 +506,9 @@ public class TrackingService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        // If the service is killed by the system, restart it with the same intent.
-        return START_STICKY;
-    }
-
+    public void onStatusChanged(String provider, int status, android.os.Bundle extras) { }
     @Override
-    public void onDestroy() {
-        try {
-            saveServiceData();
-            stopFusedLocationUpdates();
-            handler.removeCallbacks(notificationUpdater);
-        } catch (Exception e) {
-            Log.e(TAG, "Error in onDestroy: " + e.getMessage());
-        }
-        super.onDestroy();
-    }
-
+    public void onProviderEnabled(@NonNull String provider) { }
     @Override
-    public IBinder onBind(Intent intent) {
-        // We are not providing binding, so return null.
-        return null;
-    }
-
-    // Save current service data to SharedPreferences.
-    private void saveServiceData() {
-        try {
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putFloat(KEY_TOTAL_DISTANCE, totalDistance);
-            long currentActiveTime = totalActiveTime;
-            if (startTime > 0) {
-                currentActiveTime += (System.currentTimeMillis() - startTime);
-            }
-            editor.putLong(KEY_TOTAL_ACTIVE_TIME, currentActiveTime);
-            editor.commit();
-            Log.d(TAG, "saveServiceData: totalDistance=" + totalDistance
-                    + ", totalActiveTime=" + currentActiveTime);
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving service data: " + e.getMessage());
-        }
-    }
-
-    // Load saved service data from SharedPreferences.
-    private void loadServiceData() {
-        try {
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            totalDistance = prefs.getFloat(KEY_TOTAL_DISTANCE, 0f);
-            totalActiveTime = prefs.getLong(KEY_TOTAL_ACTIVE_TIME, 0L);
-            Log.d(TAG, "loadServiceData: totalDistance=" + totalDistance
-                    + ", totalActiveTime=" + totalActiveTime);
-        } catch (Exception e) {
-            Log.e(TAG, "Error loading service data: " + e.getMessage());
-        }
-    }
+    public void onProviderDisabled(@NonNull String provider) { }
 }

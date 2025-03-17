@@ -1235,4 +1235,5 @@ public class BattleEcoActivity extends AppCompatActivity {
             resetGameState();
         }
     }
+
 }

@@ -212,7 +212,7 @@
 
     <!-- 3) Button at the bottom (e.g., "View Analysis" or "Start") -->
     <Button
-        android:id="@+id/buttonViewAnalysis"
+        android:id="@+id/buttonStartStop"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Start to Reduce Your Carbon Footprint"
