@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/btnbg23">
+        android:background="@drawable/bg_leaderboard">
 
-        <!-- Top container (red banner) -->
+        <!-- Top container (banner) -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -28,7 +28,7 @@
                 android:text="@string/home"
                 android:textColor="@color/WRed"
                 android:textSize="30sp"
-                android:fontFamily="@font/poppins_bold"/>
+                android:fontFamily="@font/poppins_bold" />
 
             <!-- TypeWriterView: rectangular text area on the left -->
             <com.example.cverdetotoo.TypeWriterView
@@ -48,50 +48,49 @@
                 android:layout_height="250dp"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginTop="24dp"
-                android:paddingStart="20dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/boychar"
-                android:adjustViewBounds="true"/>
+                android:paddingStart="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/boychar" />
         </FrameLayout>
 
-
         <!-- Videos Section -->
-
         <LinearLayout
             android:id="@+id/VidM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp">
 
+            <!-- "Videos" label -->
             <TextView
                 android:id="@+id/tvVideos"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/vid"
+                android:layout_weight="1"
                 android:fontFamily="@font/poppinsmedium"
+                android:text="@string/vid"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
 
+            <!-- "See more" label -->
             <TextView
                 android:id="@+id/tvMoreVideos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="170sp"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/poppins_italic"
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/seemore"
-                android:textSize="26sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
         </LinearLayout>
-
 
         <!-- Horizontal ScrollView for video items -->
         <HorizontalScrollView
@@ -113,11 +112,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardCornerRadius="8dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="8dp">
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardUseCompatPadding="true">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -132,11 +132,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardCornerRadius="8dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="8dp">
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardUseCompatPadding="true">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -151,11 +152,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardCornerRadius="8dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="8dp">
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardUseCompatPadding="true">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -163,15 +165,16 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/vid2pic" />
                 </androidx.cardview.widget.CardView>
+
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- Trivia Section -->
+        <!-- Trivia Section Title -->
         <TextView
             android:id="@+id/tvTrivia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="48dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="18dp"
             android:text="@string/trivia"
@@ -179,24 +182,27 @@
             android:textStyle="bold"
             android:textColor="#FFF3F6" />
 
+        <!-- Trivia Cards Row 1 (cards 1 & 2) -->
         <LinearLayout
             android:id="@+id/Trivia1and2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp">
 
-            <!-- trivia card 1 -->
+            <!-- Trivia card 1 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/trivia1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="8dp">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardUseCompatPadding="true">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -205,16 +211,17 @@
                     android:src="@drawable/trivia1" />
             </androidx.cardview.widget.CardView>
 
-            <!-- trivia card 2 -->
+            <!-- Trivia card 2 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/trivia2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="8dp">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardUseCompatPadding="true">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -224,23 +231,22 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <!-- Trivia names for cards 1 & 2 -->
+        <!-- Names for cards 1 & 2 -->
         <LinearLayout
             android:id="@+id/Trivia1and2Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="28dp"
-            android:layout_gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
 
             <TextView
                 android:id="@+id/Trivia1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:layout_marginBottom="18dp"
+                android:layout_marginEnd="32dp"
                 android:text="@string/trivia1"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
 
@@ -248,32 +254,33 @@
                 android:id="@+id/Trivia2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="38dp"
                 android:text="@string/trivia2"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
         </LinearLayout>
 
-        <!-- trivia card 3&4 -->
+        <!-- Trivia Cards Row 2 (cards 3 & 4) -->
         <LinearLayout
             android:id="@+id/Trivia3and4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp">
 
-            <!-- trivia card 3 -->
+            <!-- Trivia card 3 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/trivia3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="8dp">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardUseCompatPadding="true">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -282,16 +289,17 @@
                     android:src="@drawable/trivia3" />
             </androidx.cardview.widget.CardView>
 
-            <!-- trivia card 4 -->
+            <!-- Trivia card 4 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/trivia4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="8dp">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardUseCompatPadding="true">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -301,24 +309,23 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <!-- Trivia names for cards 3 & 4 -->
+        <!-- Names for cards 3 & 4 -->
         <LinearLayout
             android:id="@+id/Trivia3and4Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="28dp"
-            android:layout_gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
 
             <TextView
                 android:id="@+id/Trivia3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:layout_marginBottom="18dp"
+                android:layout_marginEnd="32dp"
                 android:gravity="center_horizontal"
                 android:text="@string/trivia3"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
 
@@ -326,15 +333,14 @@
                 android:id="@+id/Trivia4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="38dp"
                 android:gravity="center_horizontal"
                 android:text="@string/trivia4"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFF3F6" />
         </LinearLayout>
 
-        <!-- Add any other sections you need here -->
+        <!-- Add more sections as needed -->
 
     </LinearLayout>
 </ScrollView>

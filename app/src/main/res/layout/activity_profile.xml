@@ -397,7 +397,7 @@
                             android:background="@drawable/actlogbgg"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="@string/ActLog"
-                            android:textColor="@color/WRed"
+                            android:textColor="@color/BlckYellow"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:layout_marginBottom="12dp"/>

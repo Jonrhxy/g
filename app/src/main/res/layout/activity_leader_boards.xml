@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_leaderboard">
 
-    <!-- Wrap everything in ONE parent LinearLayout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,12 +14,12 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
-        <!-- Title Row (LEADERBOARD + back arrow) -->
+        <!-- Title Row (Leaderboard Title) -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="15sp">
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="30dp">
 
             <TextView
                 android:id="@+id/tvLeaderboardTitle"
@@ -32,40 +31,39 @@
                 android:fontFamily="@font/poppins_bold"
                 android:textStyle="bold"
                 android:textColor="@color/WRed" />
-
         </RelativeLayout>
 
-        <!-- Other ranks container (scoreboard) -->
+        <!-- Scoreboard Container -->
         <LinearLayout
             android:id="@+id/scoreboardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-20dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginTop="-20dp"
             android:background="@drawable/bgranks"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Top 3 container (2nd, 1st, 3rd) -->
+            <!-- Top 3 Container (2nd, 1st, 3rd places) -->
             <LinearLayout
                 android:id="@+id/top3Container"
-                android:layout_width="311sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:layout_marginStart="1sp"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="1dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <!-- 2nd Place -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <!-- This FrameLayout holds the user image and the rank overlay -->
                     <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -79,11 +77,11 @@
                             android:background="@drawable/second_place_bg"
                             android:src="@drawable/muser" />
                     </FrameLayout>
+
                     <TextView
                         android:id="@+id/tvSecondPlaceRank"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginTop="-20dp"
                         android:gravity="center"
                         android:padding="4dp"
@@ -124,13 +122,13 @@
                         android:textColor="@color/quizgreen"
                         android:text="@string/EcoH"
                         android:textSize="12sp" />
-
                 </LinearLayout>
 
                 <!-- 1st Place -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
                     android:gravity="center"
@@ -142,17 +140,17 @@
 
                         <ImageView
                             android:id="@+id/ivFirstPlace"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
                             android:background="@drawable/second_place_bg"
                             android:contentDescription="First Place"
                             android:src="@drawable/muser" />
                     </FrameLayout>
+
                     <TextView
                         android:id="@+id/tvFirstPlaceRank"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginTop="-20dp"
                         android:gravity="center"
                         android:padding="4dp"
@@ -197,8 +195,9 @@
 
                 <!-- 3rd Place -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -215,11 +214,11 @@
                             android:contentDescription="@string/pic"
                             android:src="@drawable/muser" />
                     </FrameLayout>
+
                     <TextView
                         android:id="@+id/tvThirdPlaceRank"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginTop="-20dp"
                         android:gravity="center"
                         android:padding="4dp"
@@ -262,10 +261,9 @@
                         android:textColor="@color/quizgreen"
                         android:textSize="12sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- This goes INSIDE otherRanksContainer (which is inside your main LinearLayout) -->
+            <!-- Other Ranks Container -->
             <LinearLayout
                 android:id="@+id/otherRanksContainer"
                 android:layout_width="match_parent"
@@ -274,7 +272,6 @@
 
                 <!-- Rank 4 -->
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -283,7 +280,6 @@
                     android:padding="12dp"
                     android:background="@drawable/bg_rank_4">
 
-                    <!-- Rank Number -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -291,9 +287,8 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
-                    <!-- Avatar -->
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -301,7 +296,6 @@
                         android:src="@drawable/muser"
                         android:contentDescription="Rank 4 Avatar" />
 
-                    <!-- Name & Role in a vertical column -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -325,14 +319,14 @@
                             android:textSize="12sp" />
                     </LinearLayout>
 
-                    <!-- Points -->
-                    <TextView android:id="@+id/tvFourthPlacePoints"
+                    <TextView
+                        android:id="@+id/tvFourthPlacePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="950 points"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <!-- Rank 5 -->
@@ -352,7 +346,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -391,8 +385,9 @@
                         android:text="853 points"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <!-- Rank 6 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -410,7 +405,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -449,8 +444,9 @@
                         android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <!-- Rank 7 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -468,7 +464,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -507,7 +503,7 @@
                         android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <!-- Rank 8 -->
@@ -527,7 +523,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -566,8 +562,9 @@
                         android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <!-- Rank 9 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -585,7 +582,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -624,8 +621,9 @@
                         android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <!-- Rank 10 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -643,7 +641,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -682,11 +680,9 @@
                         android:text="@string/nopts"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

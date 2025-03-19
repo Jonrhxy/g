@@ -7,8 +7,17 @@
     <!-- Customize your light theme here. -->
     <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
-    <!-- Update Theme.CVERDETOTOO to inherit from a MaterialComponents theme -->
     <style name="Theme.CVERDETOTOO" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <!-- Replace with your desired colors -->
+        <item name="colorPrimary">@color/LBrown</item>
+        <item name="colorPrimaryVariant">@color/LBrown</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <item name="colorSecondary">@color/Green</item>
+        <item name="colorSecondaryVariant">@color/DarkG</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+
+        <!-- If using Material 3, you might see colorScheme.* items instead -->
     </style>
+
 </resources>
