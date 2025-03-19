@@ -1,0 +1,11 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Progress color/shape -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#006A00" /> <!-- bright green for progress -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

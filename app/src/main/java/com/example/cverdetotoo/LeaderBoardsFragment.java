@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -109,22 +113,47 @@ public class LeaderBoardsFragment extends Fragment {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        // Temporary list to hold the leaderboard data
                         List<UserData> leaderboardData = new ArrayList<>();
+
+                        // We'll store all the asynchronous sub-fetch tasks here
+                        List<Task<?>> tasks = new ArrayList<>();
+
+                        // For each doc in Games (each user)
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.contains("points")) {
-                                String username = document.getString("username");
-                                if (username == null) {
-                                    username = document.getId();
-                                }
-                                int score = document.getLong("points") != null
-                                        ? document.getLong("points").intValue()
-                                        : 0;
-                                leaderboardData.add(new UserData(username, score));
-                            }
+                            // The doc ID is typically the username (or userId)
+                            final String userId = document.getId();
+
+                            // If the doc has a "username" field, use it. Otherwise fallback to doc ID
+                            String username = document.contains("username")
+                                    ? document.getString("username")
+                                    : userId;
+
+                            // Main doc points from Games/{username}
+                            Long mainPointsLong = document.getLong("points");
+                            final int mainPoints = (mainPointsLong != null) ? mainPointsLong.intValue() : 0;
+
+                            // Now fetch additional points from Gamez/{username}/records/BattleEco and CYCF
+                            Task<Integer> totalPointsTask = getUserTotalPoints(userId, mainPoints);
+
+                            // Once that sub-task finishes, add an entry to the leaderboard list
+                            totalPointsTask.addOnSuccessListener(totalPoints -> {
+                                leaderboardData.add(new UserData(username, totalPoints));
+                            });
+
+                            tasks.add(totalPointsTask);
                         }
 
-                        leaderboardData.sort((a, b) -> Integer.compare(b.highScore, a.highScore));
-                        updateLeaderboardUI(leaderboardData);
+                        // When ALL tasks are complete, we can safely sort and update UI
+                        Tasks.whenAll(tasks).addOnSuccessListener(aVoid -> {
+                            // Sort descending by score
+                            leaderboardData.sort((a, b) -> Integer.compare(b.highScore, a.highScore));
+                            updateLeaderboardUI(leaderboardData);
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(getContext(),
+                                    "Error summing leaderboard data: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        });
                     } else {
                         Toast.makeText(getContext(),
                                 "Error loading leaderboard data: " + task.getException(),
@@ -132,6 +161,56 @@ public class LeaderBoardsFragment extends Fragment {
                     }
                 });
     }
+
+    /**
+     * Helper method to fetch sub-collection points from:
+     *   Gamez/{userId}/records/BattleEco -> "points"
+     *   Gamez/{userId}/records/CYCF -> "points"
+     * Then add them to the given mainPoints and return the total via a Task<Integer>.
+     */
+    private Task<Integer> getUserTotalPoints(String userId, int mainPoints) {
+        // References for sub-collection docs
+        DocumentReference battleEcoRef = db.collection("Gamez")
+                .document(userId)
+                .collection("records")
+                .document("BattleEco");
+
+        DocumentReference cycfRef = db.collection("Gamez")
+                .document(userId)
+                .collection("records")
+                .document("CYCF");
+
+        // Fetch each doc
+        Task<DocumentSnapshot> battleEcoTask = battleEcoRef.get();
+        Task<DocumentSnapshot> cycfTask = cycfRef.get();
+
+        // Combine them with Tasks.whenAllSuccess(...)
+        return Tasks.whenAllSuccess(battleEcoTask, cycfTask)
+                .continueWith(task -> {
+                    // Start total with mainPoints from Games/{userId}
+                    int total = mainPoints;
+
+                    DocumentSnapshot battleEcoSnap = battleEcoTask.getResult();
+                    if (battleEcoSnap != null && battleEcoSnap.exists()) {
+                        Long bePoints = battleEcoSnap.getLong("points");
+                        if (bePoints != null) {
+                            total += bePoints.intValue();
+                        }
+                    }
+
+                    DocumentSnapshot cycfSnap = cycfTask.getResult();
+                    if (cycfSnap != null && cycfSnap.exists()) {
+                        Long cycfPoints = cycfSnap.getLong("points");
+                        if (cycfPoints != null) {
+                            total += cycfPoints.intValue();
+                        }
+                    }
+
+                    // Return the final sum
+                    return total;
+                });
+    }
+
 
     private void updateLeaderboardUI(List<UserData> leaderboardData) {
         int totalEntries = Math.min(leaderboardData.size(), 10);

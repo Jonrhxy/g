@@ -69,12 +69,14 @@ public class GPS extends AppCompatActivity implements LocationListener {
 
     // Constants
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+    // Adjusted conversion and goal values
     private static final int STEPS_PER_KM = 1316;
     private static final int GOAL_STEPS = 1500;
-    private static final float SPEED_THRESHOLD = 2.5f;
+    // Adjusted filtering thresholds:
+    private static final float SPEED_THRESHOLD = 5.0f;    // Increased threshold to allow more speed variation
     private static final float ACCURACY_THRESHOLD = 30f;
-    private static final float MAX_DISTANCE_DELTA = 50f;
-    private static final float MIN_DISTANCE_DELTA = 3f;
+    private static final float MAX_DISTANCE_DELTA = 100f;   // Increased max distance to capture longer jumps
+    private static final float MIN_DISTANCE_DELTA = 1f;     // Decreased min distance to register even small movements
 
     // SharedPreferences keys (common file)
     private static final String PREFS_NAME = "session_prefs";
@@ -152,8 +154,7 @@ public class GPS extends AppCompatActivity implements LocationListener {
                 textTimeValue.setText(timeString);
                 textDistanceValue.setText(distanceString);
                 textStepsValue.setText(String.valueOf(steps));
-                textCo2Value.setText(String.format(Locale.getDefault(),
-                        "%.2f kg", co2Saved, modeText));
+                textCo2Value.setText(String.format(Locale.getDefault(), "%.2f kg", co2Saved));
             } catch (Exception e) {
                 Log.e(TAG, "Error in trackingUpdateReceiver: " + e.getMessage());
             }
@@ -246,7 +247,6 @@ public class GPS extends AppCompatActivity implements LocationListener {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         requestLocationPermission();
-
 
         // Fetch Firestore document and load session data.
         initializeDailyRecord();
@@ -449,16 +449,29 @@ public class GPS extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         if (goalReached) return;
         if (trackingState != TrackingState.RUNNING) return;
-        if (location.hasAccuracy() && location.getAccuracy() > ACCURACY_THRESHOLD) return;
+        if (location.hasAccuracy() && location.getAccuracy() > ACCURACY_THRESHOLD) {
+            Log.d(TAG, "Location accuracy poor: " + location.getAccuracy());
+            return;
+        }
 
+        // If there is a previous location, calculate delta
         if (!locations.isEmpty()) {
             Location lastLocation = locations.get(locations.size() - 1);
             float distanceDelta = lastLocation.distanceTo(location);
-            if (distanceDelta < MIN_DISTANCE_DELTA || distanceDelta > MAX_DISTANCE_DELTA) return;
+            Log.d(TAG, "Distance delta: " + distanceDelta + " meters");
+            // Only add if the distance is within our adjusted thresholds
+            if (distanceDelta < MIN_DISTANCE_DELTA || distanceDelta > MAX_DISTANCE_DELTA) {
+                Log.d(TAG, "Distance delta out of acceptable range.");
+                return;
+            }
             long timeDelta = location.getTime() - lastLocation.getTime();
             if (timeDelta > 0) {
                 float speed = distanceDelta / (timeDelta / 1000f);
-                if (speed > SPEED_THRESHOLD) return;
+                Log.d(TAG, "Calculated speed: " + speed + " m/s");
+                if (speed > SPEED_THRESHOLD) {
+                    Log.d(TAG, "Speed exceeds threshold. Update ignored.");
+                    return;
+                }
             }
             totalDistance += distanceDelta;
         }
@@ -519,19 +532,30 @@ public class GPS extends AppCompatActivity implements LocationListener {
             String modeText;
             switch (selectedMode) {
                 case CAR:
-                    emissionFactor = EMISSION_FACTOR_CAR; modeText = "car"; break;
+                    emissionFactor = EMISSION_FACTOR_CAR;
+                    modeText = "car";
+                    break;
                 case BUS:
-                    emissionFactor = EMISSION_FACTOR_BUS; modeText = "bus"; break;
+                    emissionFactor = EMISSION_FACTOR_BUS;
+                    modeText = "bus";
+                    break;
                 case MOTORCYCLE:
-                    emissionFactor = EMISSION_FACTOR_MOTORCYCLE; modeText = "motorcycle"; break;
+                    emissionFactor = EMISSION_FACTOR_MOTORCYCLE;
+                    modeText = "motorcycle";
+                    break;
                 case JEEPNEY:
-                    emissionFactor = EMISSION_FACTOR_JEEPNEY; modeText = "jeepney"; break;
+                    emissionFactor = EMISSION_FACTOR_JEEPNEY;
+                    modeText = "jeepney";
+                    break;
                 case TRUCK:
-                    emissionFactor = EMISSION_FACTOR_TRUCK; modeText = "truck"; break;
+                    emissionFactor = EMISSION_FACTOR_TRUCK;
+                    modeText = "truck";
+                    break;
                 default:
-                    emissionFactor = EMISSION_FACTOR_CAR; modeText = "car"; break;
+                    emissionFactor = EMISSION_FACTOR_CAR;
+                    modeText = "car";
+                    break;
             }
-
 
             double emissionSaved = distanceKm * emissionFactor;
             textCo2Value.setText(String.format(Locale.getDefault(), "%.2f kg", emissionSaved));
@@ -609,17 +633,29 @@ public class GPS extends AppCompatActivity implements LocationListener {
             String modeText;
             switch (selectedMode) {
                 case CAR:
-                    emissionFactor = EMISSION_FACTOR_CAR; modeText = "car"; break;
+                    emissionFactor = EMISSION_FACTOR_CAR;
+                    modeText = "car";
+                    break;
                 case BUS:
-                    emissionFactor = EMISSION_FACTOR_BUS; modeText = "bus"; break;
+                    emissionFactor = EMISSION_FACTOR_BUS;
+                    modeText = "bus";
+                    break;
                 case MOTORCYCLE:
-                    emissionFactor = EMISSION_FACTOR_MOTORCYCLE; modeText = "motorcycle"; break;
+                    emissionFactor = EMISSION_FACTOR_MOTORCYCLE;
+                    modeText = "motorcycle";
+                    break;
                 case JEEPNEY:
-                    emissionFactor = EMISSION_FACTOR_JEEPNEY; modeText = "jeepney"; break;
+                    emissionFactor = EMISSION_FACTOR_JEEPNEY;
+                    modeText = "jeepney";
+                    break;
                 case TRUCK:
-                    emissionFactor = EMISSION_FACTOR_TRUCK; modeText = "truck"; break;
+                    emissionFactor = EMISSION_FACTOR_TRUCK;
+                    modeText = "truck";
+                    break;
                 default:
-                    emissionFactor = EMISSION_FACTOR_CAR; modeText = "car"; break;
+                    emissionFactor = EMISSION_FACTOR_CAR;
+                    modeText = "car";
+                    break;
             }
             double co2Saved = distanceKm * emissionFactor;
 
@@ -834,5 +870,4 @@ public class GPS extends AppCompatActivity implements LocationListener {
             Log.e(TAG, "Error stopping TrackingService: " + e.getMessage());
         }
     }
-
 }

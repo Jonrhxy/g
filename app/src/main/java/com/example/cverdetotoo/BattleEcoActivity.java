@@ -359,36 +359,26 @@ public class BattleEcoActivity extends AppCompatActivity {
     // -------------------------------
 
     private void showNpcDialogue(String message, Runnable afterDismiss) {
-
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_npc_explanation, null);
         TextView npcMessage = dialogView.findViewById(R.id.npcMessage);
         TextView npcCloseButton = dialogView.findViewById(R.id.npcCloseButton);
-
-        // Make the dialogue text smaller (adjust the value as needed)
         npcMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.TransparentFullScreenDialog);
         builder.setView(dialogView);
         final AlertDialog npcDialog = builder.create();
         npcDialog.setCanceledOnTouchOutside(false);
-
         npcDialog.setOnShowListener(dialogInterface -> {
             Window window = npcDialog.getWindow();
             if (window != null) {
-                // Set the layout size to wrap the content (or you can specify a custom width/height)
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                // Position the dialog in the bottom-right corner
                 window.setGravity(Gravity.BOTTOM | Gravity.END);
                 WindowManager.LayoutParams params = window.getAttributes();
-                // Adjust offsets (in pixels) if needed
-                params.x = 20; // distance from the right edge
-                params.y = 20; // distance from the bottom edge
+                params.x = 20;
+                params.y = 20;
                 window.setAttributes(params);
             }
         });
-
         animateText(npcMessage, message, 0);
-
         npcCloseButton.setOnClickListener(v -> {
             npcDialog.dismiss();
             if (afterDismiss != null && isGameActive()) {
@@ -397,7 +387,6 @@ public class BattleEcoActivity extends AppCompatActivity {
         });
         npcDialog.show();
     }
-
 
     // Updated showBossIntroDialogue with callback.
     private void showBossIntroDialogue(int bossIndex, Runnable afterDismiss) {
@@ -485,37 +474,27 @@ public class BattleEcoActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_npc_explanation, null);
         TextView npcMessage = dialogView.findViewById(R.id.npcMessage);
         TextView npcCloseButton = dialogView.findViewById(R.id.npcCloseButton);
-        npcCloseButton.setVisibility(View.GONE); // Hide close button.
-
-        // Set a smaller text size (adjust the value as needed)
+        npcCloseButton.setVisibility(View.GONE);
         npcMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.TransparentFullScreenDialog);
         builder.setView(dialogView);
         final AlertDialog ecoDialog = builder.create();
         ecoDialog.setCanceledOnTouchOutside(false);
         ecoDialog.setCancelable(false);
-
         if (ecoDialog.getWindow() != null) {
-            // Set the layout to wrap content
             ecoDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT);
-            // Position the dialog at the bottom-right corner
             ecoDialog.getWindow().setGravity(Gravity.BOTTOM | Gravity.END);
             WindowManager.LayoutParams params = ecoDialog.getWindow().getAttributes();
-            // Adjust offsets if necessary
-            params.x = 20; // distance from the right edge
-            params.y = 20; // distance from the bottom edge
+            params.x = 20;
+            params.y = 20;
             ecoDialog.getWindow().setAttributes(params);
         }
-
         animateText(npcMessage, ecoTip, 0);
         ecoDialog.show();
-
         MediaPlayer ecoTipSoundPlayer = MediaPlayer.create(BattleEcoActivity.this, soundResId);
         ecoTipSoundPlayer.start();
         ecoTipSoundPlayer.setOnCompletionListener(mp -> mp.release());
-
         new Handler().postDelayed(() -> ecoDialog.dismiss(), durationMs);
     }
 
@@ -796,7 +775,6 @@ public class BattleEcoActivity extends AppCompatActivity {
             if (!isPlayerTurn) {  // Ensure it's AI's turn.
                 int damage = 45;
                 int shieldGain = 30;
-                // Deal a flat 45 damage to the player.
                 int[] result = applyDamage(false, damage, false);
                 computerShield += shieldGain;
                 logMessage = "Computer used Pollution Pulse: dealt " + result[0] + " damage and gained "
@@ -809,7 +787,6 @@ public class BattleEcoActivity extends AppCompatActivity {
                 logMessage = "Player cannot use Pollution Pulse (AI-only card).";
             }
         }
-
         else if(cardName.contains("emissions eruption")){
             if(isPlayerTurn){
                 int[] result = applyDamage(true, 35, false);
@@ -858,10 +835,8 @@ public class BattleEcoActivity extends AppCompatActivity {
 
     private int extractEnergyCost(String cardName) {
         int cost = 0;
-        // Pattern: one or more digits followed by optional spaces and then "energy"
         Pattern pattern = Pattern.compile("(\\d+)\\s*energy", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(cardName);
-        // Loop through all matches; the last one should be the cost
         while (matcher.find()) {
             try {
                 cost = Integer.parseInt(matcher.group(1));
@@ -871,7 +846,6 @@ public class BattleEcoActivity extends AppCompatActivity {
         }
         return cost;
     }
-
 
     private void updateUI() {
         playerHealthText.setText("❤️ " + playerHealth);
@@ -894,17 +868,14 @@ public class BattleEcoActivity extends AppCompatActivity {
     private void proceedToNextBossOrWin() {
         // If the computer (boss) is defeated:
         if (computerHealth <= 0) {
+            // Update partial results (points/coins) in games/username
             if (currentBossIndex == 0) {
-                // Defeated first boss => +30 points
                 storePartialBattleEcoUpdate(0, 30);
             } else if (currentBossIndex == 1) {
-                // Defeated second boss => +40 points
                 storePartialBattleEcoUpdate(0, 40);
             } else if (currentBossIndex == 2) {
-                // Defeated third boss => +50 points
                 storePartialBattleEcoUpdate(0, 50);
             }
-
 
             // Move on to the next boss
             currentBossIndex++;
@@ -916,14 +887,13 @@ public class BattleEcoActivity extends AppCompatActivity {
                 updateUI();
                 handler.postDelayed(() -> showBossIntroDialogue(currentBossIndex, this::startPlayerTurn), 500);
             } else {
-                // Player has cleared all 3 bosses!
-                awardTimeBasedPoints();  // Then we call gameOver()
+                // Player has cleared all bosses!
+                awardTimeBasedPoints();
             }
         }
     }
 
-
-
+    // Updated awardTimeBasedPoints to pass finalPoints to final update.
     private void awardTimeBasedPoints() {
         long totalTimeMillis = System.currentTimeMillis() - gameStartTime;
         long totalSeconds = totalTimeMillis / 1000;
@@ -941,18 +911,13 @@ public class BattleEcoActivity extends AppCompatActivity {
             finalPoints = 0;
         }
 
-        // Convert to total minutes or keep totalSeconds—your choice.
         int totalMinutes = (int) (totalSeconds / 60);
 
-        // Log a final "win" result, awarding finalPoints if > 0.
-        // If you want to award finalPoints even if it's 0, pass 0. The "win" is still logged.
-        storeFinalBattleEcoResult(100, true, totalMinutes);
-
+        // Log final result into gamez/username/records/BattleEco
+        storeFinalBattleEcoResult(100, finalPoints, true, totalMinutes);
 
         gameOver();
     }
-
-
 
     private void gameOver() {
         gameIsOver = true;
@@ -1016,7 +981,7 @@ public class BattleEcoActivity extends AppCompatActivity {
         computerShield = 0;
         playerEnergy = 3;
         computerEnergy = 3;
-        timeRemaining = 300000; // 5 minutes
+        timeRemaining = 300000;
         lastPlayerCardResId = -1;
         lastAICardResId = -1;
         if(handLayout != null){
@@ -1087,74 +1052,72 @@ public class BattleEcoActivity extends AppCompatActivity {
         });
     }
 
+    // -------------------------------
+    // Firestore Update Methods
+    // -------------------------------
+
+    // Partial update: after defeating each boss, update/create points (and coins) at games/{username}
     private void storePartialBattleEcoUpdate(int coinsIncrement, int pointsIncrement) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String username = currentUser.getDisplayName();
         if (username == null || username.isEmpty()) {
             Toast.makeText(this, "Username not set for the current user", Toast.LENGTH_SHORT).show();
             return;
         }
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Gamez")
-                .document(username)
-                .collection("records")
-                .document("BattleEco");
-
-        // Use update(...) with FieldValue.increment(...) for each field you want to add to.
-        docRef.update(
-                "coins", FieldValue.increment(coinsIncrement),
-                "points", FieldValue.increment(pointsIncrement)
-        ).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Partial BattleEco update saved", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error saving partial update: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+        // Path: games/{username}
+        DocumentReference docRef = db.collection("Games")
+                .document(username);
+        Map<String, Object> data = new HashMap<>();
+        data.put("points", FieldValue.increment(pointsIncrement));
+        data.put("coins", FieldValue.increment(coinsIncrement));
+        docRef.set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Partial update saved", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error saving partial update: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
-
-
-    private void storeFinalBattleEcoResult(int coinIncrement, boolean isWin, int timeClearedMinutes) {
+    // Final update: when game is cleared, update/create final results at gamez/{username}/records/BattleEco
+    private void storeFinalBattleEcoResult(int coinIncrement, int finalPoints, boolean isWin, int timeClearedMinutes) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String username = currentUser.getDisplayName();
         if (username == null || username.isEmpty()) {
             Toast.makeText(this, "Username not set for the current user", Toast.LENGTH_SHORT).show();
             return;
         }
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Path: gamez/{username}/records/BattleEco
         DocumentReference docRef = db.collection("Gamez")
                 .document(username)
                 .collection("records")
                 .document("BattleEco");
-
         String dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 .format(new Date());
-
-        // We can use update(...) with both FieldValue and direct values in the same call.
-        docRef.update(
-                "coins", FieldValue.increment(coinIncrement),
-                "outcome", isWin ? "win" : "lose",
-                "date", dateString,
-                "timeCleared", timeClearedMinutes * 60
-        ).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Final result saved", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error saving final result: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+        Map<String, Object> data = new HashMap<>();
+        data.put("coins", FieldValue.increment(coinIncrement));
+        data.put("points", FieldValue.increment(finalPoints));
+        data.put("outcome", isWin ? "win" : "lose");
+        data.put("date", dateString);
+        data.put("timeCleared", timeClearedMinutes * 60);
+        docRef.set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Final result saved", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error saving final result: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
-
-
 
     // Overloaded version for boss intro if no callback is provided.
     private void showBossIntroDialogue(int bossIndex) {
@@ -1235,5 +1198,4 @@ public class BattleEcoActivity extends AppCompatActivity {
             resetGameState();
         }
     }
-
 }

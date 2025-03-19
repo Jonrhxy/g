@@ -190,7 +190,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <!-- SCROLLABLE CONTENT (wrapped in ScrollView) -->
+    <!-- SCROLLABLE CONTENT -->
     <ScrollView
         android:id="@+id/scrollViewMainContent"
         android:layout_width="0dp"
@@ -377,7 +377,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- ACTIVITY LOG CONTAINER (brown background + bubble) -->
+                    <!-- ACTIVITY LOG CONTAINER -->
                     <LinearLayout
                         android:id="@+id/activityLogHistoryContainer"
                         android:layout_width="match_parent"
@@ -468,7 +468,7 @@
                         android:clipToPadding="false" />
                 </LinearLayout>
 
-                <!-- New RadioGroup for Weekly/Monthly toggle -->
+                <!-- RadioGroup for Weekly/Monthly toggle -->
                 <RadioGroup
                     android:id="@+id/radioGroupTimeRange"
                     android:layout_width="wrap_content"
@@ -494,6 +494,7 @@
                         android:textColor="@android:color/white"/>
                 </RadioGroup>
 
+                <!-- BarChart for tracking data -->
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChart"
                     android:layout_width="match_parent"
@@ -501,7 +502,145 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"/>
 
-                <!-- Bottom Button inside ScrollView -->
+                <!-- TOWER SECTION -->
+                <FrameLayout
+                    android:id="@+id/towerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:clipToPadding="false"
+                    android:gravity="center">
+
+                    <!-- 1) The main tower body -->
+                    <ImageView
+                        android:id="@+id/imageTower"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/tower_circle" />
+
+
+                    <!-- 3) Current step count (inside the orb) -->
+                    <TextView
+                        android:id="@+id/textTowerSteps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="35dp"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <!-- 4) Milestones: from lowest (bottom) to highest (top).
+                         Each uses layout_gravity="top|center_horizontal" but
+                         the marginTop is set so that 50 is near bottom,
+                         10,000 is near the top.
+                         Tweak the dp values as needed. -->
+
+                    <!-- 50 (lowest) near bottom -->
+                    <TextView
+                        android:id="@+id/textMilestone50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="520dp"
+                        android:text="50"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 200 a bit above 50 -->
+                    <TextView
+                        android:id="@+id/textMilestone200"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="460dp"
+                        android:text="200"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 500 above 200 -->
+                    <TextView
+                        android:id="@+id/textMilestone500"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="400dp"
+                        android:text="500"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 1,000 above 500 -->
+                    <TextView
+                        android:id="@+id/textMilestone1000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="340dp"
+                        android:text="1,000"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 3,000 -->
+                    <TextView
+                        android:id="@+id/textMilestone3000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="280dp"
+                        android:text="3,000"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 5,000 -->
+                    <TextView
+                        android:id="@+id/textMilestone5000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="220dp"
+                        android:text="5,000"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <!-- 10,000 (highest) near the top -->
+                    <TextView
+                        android:id="@+id/textMilestone10000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:layout_marginTop="160dp"
+                        android:text="10,000"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <!-- 5) "Fit Tower" label near bottom -->
+                    <TextView
+                        android:id="@+id/textFitTower"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:text="Fit Tower"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </FrameLayout>
+
+
+                <!-- Bottom Button -->
                 <Button
                     android:id="@+id/bottomButton"
                     android:layout_width="200sp"
